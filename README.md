@@ -51,11 +51,11 @@ Curto criar sistemas web, trabalhar com banco de dados e desenvolver projetos fu
 ## 🌐 Contato
 
 <p align="center">
-  <a href="https://linkedin.com/in/SEU-USUARIO">
+  <a href="https://linkedin.com/in/www.linkedin.com/in/caetano-silva-euzebio-6271591a0">
     <img src="https://img.shields.io/badge/LinkedIn-1400c6?style=for-the-badge&logo=linkedin&logoColor=white"/>
   </a>
 
-  <a href="mailto:SEU_EMAIL">
+  <a href="mailto:caetanoribeiro461@gmail.com">
     <img src="https://img.shields.io/badge/Email-ff0028?style=for-the-badge&logo=gmail&logoColor=white"/>
   </a>
 </p>
