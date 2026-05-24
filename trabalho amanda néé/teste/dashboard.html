@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+  <title>Dashboard | LevelUp Finance</title>
+
+
+  <!-- Bootstrap -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+
+
+  <!-- Bootstrap Icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+  />
+
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+
+
+<body>
+
+
+  <div class="dashboard-layout">
+
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+
+      <div class="sidebar-logo">
+        <h1>LEVELUP</h1>
+        <span>FINANÇAS</span>
+      </div>
+
+
+      <nav class="sidebar-menu">
+
+
+        <a href="dashboard.html" class="menu-item active">
+          <i class="bi bi-house-door-fill"></i>
+          Hub
+        </a>
+
+
+        <a href="arena.html" class="menu-item active">
+          <i class="bi bi-sword"></i>
+          Arena
+        </a>
+
+
+        <a href="santuario.html" class="menu-item active">
+          <i class="bi bi-stars"></i>
+          Santuário
+        </a>
+
+
+        <a href="oraculo.html" class="menu-item">
+          <i class="bi bi-braces-asterisk"></i>
+          Oráculo
+        </a>
+
+
+      </nav>
+        <a href="index.html" class="logout-btn">
+        <i class="bi bi-box-arrow-left"></i>
+        Sair
+        </a>
+    </aside>
+
+
+    <!-- CONTENT -->
+    <main class="main-content">
+
+
+      <!-- TOP CARD -->
+      <section class="profile-card">
+
+
+        <div class="profile-left">
+
+
+          <div class="avatar"></div>
+
+
+          <div>
+            <h2>Aventureiro</h2>
+            <p>Nível 5 Mago da Economia</p>
+          </div>
+
+
+        </div>
+
+
+        <div class="profile-right">
+          <span>Saldo</span>
+          <h3>$8.420</h3>
+        </div>
+
+
+        <div class="xp-area">
+
+
+          <div class="xp-top">
+            <span>XP: 2340 / 3000</span>
+            <span>2340 / 3000</span>
+          </div>
+
+
+          <div class="xp-bar">
+            <div class="xp-fill"></div>
+          </div>
+
+
+        </div>
+
+
+      </section>
+
+
+      <!-- STATS -->
+      <section class="stats-grid">
+
+
+        <div class="left-cards">
+
+
+          <!-- RECEITAS -->
+          <div class="status-card income">
+
+
+            <div class="card-icon">
+              <i class="bi bi-graph-up-arrow"></i>
+            </div>
+
+
+            <span class="status-title">RECEITAS</span>
+
+
+            <h2>$5,300</h2>
+
+
+            <p>Este mês</p>
+
+
+          </div>
+
+
+          <!-- GASTOS -->
+          <div class="status-card expenses">
+
+
+            <div class="card-icon">
+              <i class="bi bi-graph-down-arrow"></i>
+            </div>
+
+
+            <span class="status-title">GASTOS</span>
+
+
+            <h2>$3,300</h2>
+
+
+            <p>Este mês</p>
+
+
+          </div>
+
+
+          <!-- DIVIDAS -->
+          <div class="status-card debts">
+
+
+            <div class="card-icon">
+              <i class="bi bi-lightning-charge"></i>
+            </div>
+
+
+            <span class="status-title">DÍVIDAS ATIVAS</span>
+
+
+            <h2>3 Monstros</h2>
+
+
+            <p>Total: $12,400</p>
+
+
+          </div>
+
+
+        </div>
+
+
+        <!-- CHART -->
+        <div class="chart-card">
+
+
+          <h2>VISÃO FINANCEIRA</h2>
+
+
+          <div class="chart-area">
+
+
+            <div class="chart-grid">
+
+
+              <div class="bar-column">
+                <div class="bar"></div>
+                <span>Jan</span>
+              </div>
+
+
+              <div class="bar-column">
+                <div class="bar"></div>
+                <span>Fev</span>
+              </div>
+
+
+              <div class="bar-column">
+                <div class="bar taller"></div>
+                <span>Mar</span>
+              </div>
+
+
+              <div class="bar-column">
+                <div class="bar"></div>
+                <span>Abr</span>
+              </div>
+
+
+              <div class="bar-column">
+                <div class="bar tallest"></div>
+                <span>Mai</span>
+              </div>
+
+
+            </div>
+
+
+          </div>
+
+
+          <div class="legend">
+            <span class="green"></span> receitas
+            <span class="orange"></span> gastos
+          </div>
+
+
+        </div>
+
+
+      </section>
+
+
+      <!-- QUESTS -->
+      <section class="quests-section">
+
+
+        <h2 class="section-title">
+          MISSÕES ATIVAS
+        </h2>
+
+
+        <div class="quests-grid">
+
+
+          <!-- QUEST -->
+          <div class="quest-card">
+
+
+            <h3>Quitar Cartão de Crédito</h3>
+
+
+            <div class="quest-progress">
+              <div class="quest-fill"></div>
+            </div>
+
+
+            <span>+500 XP</span>
+
+
+          </div>
+
+
+          <!-- QUEST -->
+          <div class="quest-card">
+
+
+            <h3>Guardar $1000 na Reserva</h3>
+
+
+            <div class="quest-progress">
+              <div class="quest-fill medium"></div>
+            </div>
+
+
+            <span>+300 XP</span>
+
+
+          </div>
+
+
+          <!-- QUEST -->
+          <div class="quest-card">
+
+
+            <h3>Registrar gastos da semana</h3>
+
+
+            <div class="quest-progress">
+              <div class="quest-fill large"></div>
+            </div>
+
+
+            <span>+100 XP</span>
+
+
+          </div>
+
+
+        </div>
+
+
+      </section>
+
+
+      <!-- ACTIVITY -->
+      <section class="activity-section">
+
+
+        <h2 class="section-title">
+          ATIVIDADE RECENTE
+        </h2>
+
+
+        <div class="activity-card">
+
+
+          <div class="activity-item">
+            <div>
+              <h4>Depósito Salarial</h4>
+              <span>2026-05-01</span>
+            </div>
+
+
+            <strong class="positive">+$5.000</strong>
+          </div>
+
+
+          <div class="activity-item">
+            <div>
+              <h4>Pagamento do Aluguel</h4>
+              <span>2026-05-02</span>
+            </div>
+
+
+            <strong class="negative">-$1.200</strong>
+          </div>
+
+
+          <div class="activity-item">
+            <div>
+              <h4>Mercado</h4>
+              <span>2026-05-05</span>
+            </div>
+
+
+            <strong class="negative">-$320</strong>
+          </div>
+
+
+          <div class="activity-item">
+            <div>
+              <h4>Projeto Freelancer</h4>
+              <span>2026-05-10</span>
+            </div>
+
+
+            <strong class="positive">+$800</strong>
+          </div>
+
+
+        </div>
+
+
+      </section>
+
+
+      <!-- FLOAT BUTTON -->
+      <button
+      class="floating-btn"
+      id="openQuickModal"
+      >
+      <i class="bi bi-plus-lg"></i>
+      </button>
+<!-- MODAL -->
+<div class="quick-modal" id="quickModal">
+
+
+  <div class="quick-box">
+
+
+    <!-- MENU -->
+    <div id="mainQuickActions">
+
+
+      <h2>AÇÃO RÁPIDA</h2>
+
+
+      <button
+        class="quick-action income-action"
+        id="openIncomeForm"
+      >
+        REGISTRAR RECEITA
+      </button>
+
+
+      <button
+        class="quick-action expense-action"
+      >
+        REGISTRAR GASTO
+      </button>
+
+
+      <button
+        class="quick-action debt-action"
+      >
+        ATACAR DÍVIDA
+      </button>
+
+
+      <button
+        class="quick-action close-action"
+        id="closeQuickModal"
+      >
+        FECHAR
+      </button>
+
+
+    </div>
+
+
+    <!-- FORM RECEITA -->
+    <div
+      class="income-form"
+      id="incomeForm"
+    >
+
+
+      <h2 class="income-title">
+        REGISTRAR RECEITA
+      </h2>
+
+
+      <!-- NOME -->
+      <div class="form-group">
+
+
+        <label>
+          NOME DO GANHO / ORIGEM
+        </label>
+
+
+        <input
+          type="text"
+          id="incomeName"
+          placeholder="Ex: Salário"
+        />
+
+
+      </div>
+
+
+      <!-- VALOR -->
+      <div class="form-group">
+
+
+        <label>
+          QUANTIDADE DE OURO (R$)
+        </label>
+
+
+        <input
+          type="number"
+          id="incomeValue"
+          placeholder="5000"
+        />
+
+
+      </div>
+
+
+      <!-- CATEGORIA -->
+      <div class="form-group">
+
+
+        <label>
+          CATEGORIA
+        </label>
+
+
+        <select id="incomeCategory">
+
+
+          <option>
+            Trabalho
+          </option>
+
+
+          <option>
+            Investimentos
+          </option>
+
+
+          <option>
+            Freelancer
+          </option>
+
+
+          <option>
+            Presentes
+          </option>
+
+
+        </select>
+
+
+      </div>
+
+
+      <!-- BOTÕES -->
+      <div class="income-buttons">
+
+
+        <button
+          class="quick-action close-action"
+          id="backToMenu"
+        >
+          VOLTAR
+        </button>
+
+
+        <button
+          class="quick-action income-action"
+          id="collectIncome"
+        >
+          COLETAR OURO
+        </button>
+
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+</div>
+    </main>
+
+
+  </div>
+
+
+  <script src="js/dashboard.js"></script>
+
+
+</body>
+</html>
