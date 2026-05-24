@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caetano Silva | Dev Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:      #060810;
+      --surface: #0d1120;
+      --card:    #111827;
+      --text:    #eef0f8;
+      --muted:   #7b82a3;
+      --dim:     #3a4060;
+      --accent:  #00e5ff;
+      --gold:    #ffd166;
+      --rose:    #ff4f7b;
+      --border:  rgba(0,229,255,0.10);
+      --glow:    rgba(0,229,255,0.18);
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.65;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.4;
+    }
+
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background-image:
+        linear-gradient(rgba(0,229,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.025) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+    .grid-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,229,255,0.07) 0%, transparent 70%);
+    }
+
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 500;
+      backdrop-filter: blur(20px) saturate(160%);
+      background: rgba(6,8,16,0.75);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 1rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+    .logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.25s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    .hero {
+      min-height: 100vh;
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 140px 28px 80px;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      align-items: center;
+      gap: 60px;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hero-eyebrow::before {
+      content: "";
+      display: block;
+      width: 32px; height: 1px;
+      background: var(--accent);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 5.5vw, 5rem);
+      font-weight: 800;
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+      margin-bottom: 22px;
+    }
+    .hero h1 .line2 {
+      color: transparent;
+      -webkit-text-stroke: 1.5px rgba(238,240,248,0.35);
+    }
+    .hero h1 .accent { color: var(--accent); }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 500px;
+      margin-bottom: 16px;
+      line-height: 1.75;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 52px;
+    }
+
+    .btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      padding: 13px 22px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      transition: all 0.25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #060810;
+      box-shadow: 0 0 28px rgba(0,229,255,0.25);
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 32px rgba(0,229,255,0.45);
+    }
+    .btn-ghost {
+      border: 1px solid var(--dim);
+      color: var(--text);
+      background: transparent;
+    }
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    .hero-stats { display: flex; gap: 36px; }
+    .stat-num {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent);
+      display: block;
+      line-height: 1;
+    }
+    .stat-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+    .stat-divider {
+      width: 1px;
+      background: var(--dim);
+      align-self: stretch;
+    }
+
+    .hero-visual { position: relative; }
+    .profile-frame {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .<img src="foto.jpg" class="profile-photo"> {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: linear-gradient(135deg, #0d1a2e 0%, #0a1520 50%, #0d2030 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+    .profile-initial {
+      font-size: 6rem;
+      font-weight: 800;
+      color: transparent;
+      -webkit-text-stroke: 2px var(--accent);
+      line-height: 1;
+      filter: drop-shadow(0 0 20px rgba(0,229,255,0.4));
+    }
+    .profile-sub {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .badge-float {
+      position: absolute;
+      z-index: 2;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      backdrop-filter: blur(12px);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+    }
+    .badge-float.bl { bottom: 20px; left: -20px; color: #00e5a0; }
+    .badge-float.tr { top: 24px; right: -20px; color: var(--accent); }
+    .badge-dot {
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      margin-right: 6px;
+      animation: blink 1.4s ease-in-out infinite;
+    }
+    .badge-dot.green { background: #00e5a0; }
+    .badge-dot.blue  { background: var(--accent); }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    section {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 90px 28px;
+    }
+
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-label::after {
+      content: "";
+      flex: 1;
+      max-width: 60px;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.5;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 40px;
+      line-height: 1.1;
+    }
+    .section-title em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 40px;
+      align-items: start;
+    }
+    .about-text p {
+      color: var(--muted);
+      margin-bottom: 18px;
+      line-height: 1.8;
+    }
+    .about-text strong { color: var(--text); }
+
+    .info-list { margin-top: 28px; display: flex; flex-direction: column; gap: 12px; }
+    .info-row { display: flex; gap: 14px; align-items: flex-start; font-size: 0.92rem; }
+    .info-key {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      min-width: 80px;
+      padding-top: 2px;
+    }
+    .info-val { color: var(--text); }
+    .info-val a { color: var(--accent); text-decoration: none; }
+    .info-val a:hover { text-decoration: underline; }
+
+    .courses-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 26px;
+    }
+    .courses-box h3 { font-size: 1rem; font-weight: 700; margin-bottom: 18px; color: var(--gold); }
+    .course-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 0.88rem;
+    }
+    .course-item:last-child { border-bottom: none; }
+    .course-icon { color: var(--accent); font-size: 0.75rem; margin-top: 2px; flex-shrink: 0; }
+    .course-name { color: var(--text); }
+    .course-org { font-family: 'Space Mono', monospace; font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
+
+    .skills-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+    .skill-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 26px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .skill-card:hover { border-color: rgba(0,229,255,0.3); transform: translateY(-4px); }
+    .skill-card-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .skill-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .skill-name { font-size: 0.88rem; min-width: 90px; color: var(--text); }
+    .skill-bar { flex: 1; height: 3px; background: var(--dim); border-radius: 99px; overflow: hidden; }
+    .skill-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--accent), #00b4cc);
+      width: 0;
+      transition: width 1.2s cubic-bezier(0.22,1,0.36,1);
+    }
+    .skill-pct { font-family: 'Space Mono', monospace; font-size: 0.68rem; color: var(--muted); min-width: 30px; text-align: right; }
+
+    .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+    .tag-pill {
+      padding: 6px 12px;
+      border: 1px solid var(--dim);
+      border-radius: 999px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      transition: all 0.2s;
+    }
+    .tag-pill:hover { border-color: var(--accent); color: var(--accent); }
+
+    .projects-hero-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 28px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 24px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .projects-hero-card:hover { border-color: rgba(0,229,255,0.4); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+    .proj-number { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--accent); letter-spacing: 0.1em; margin-bottom: 8px; }
+    .proj-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 10px; }
+    .proj-desc { color: var(--muted); font-size: 0.92rem; line-height: 1.7; margin-bottom: 16px; }
+    .proj-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .proj-tag {
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      background: rgba(0,229,255,0.08);
+      color: var(--accent);
+      border: 1px solid rgba(0,229,255,0.15);
+    }
+    .proj-link-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--accent);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      padding: 10px 16px;
+      border-radius: 8px;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .proj-link-btn:hover { background: rgba(0,229,255,0.08); border-color: var(--accent); }
+
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+    .proj-mini {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .proj-mini:hover { border-color: rgba(0,229,255,0.35); transform: translateY(-4px); }
+    .proj-mini .proj-title { font-size: 1.05rem; }
+    .proj-mini .proj-desc { font-size: 0.86rem; margin-bottom: 14px; }
+
+    .exp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+    .exp-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 26px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .exp-card:hover { border-color: rgba(255,209,102,0.35); transform: translateY(-4px); }
+    .exp-icon { font-size: 1.6rem; margin-bottom: 14px; }
+    .exp-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .exp-card p { color: var(--muted); font-size: 0.88rem; line-height: 1.65; }
+
+    .lang-row { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; }
+    .lang-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 18px;
+      font-size: 0.9rem;
+    }
+    .lang-level { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.06em; }
+
+    .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
+    .contact-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 26px;
+      text-decoration: none;
+      transition: border-color 0.3s, transform 0.3s;
+      display: block;
+    }
+    .contact-card:hover { border-color: rgba(0,229,255,0.4); transform: translateY(-4px); }
+    .contact-icon { font-size: 1.6rem; margin-bottom: 14px; }
+    .contact-card h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .contact-card p { font-size: 0.82rem; color: var(--muted); word-break: break-all; }
+
+    .section-divider {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 28px;
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    footer {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 40px 28px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-logo { font-family: 'Space Mono', monospace; font-size: 0.85rem; color: var(--accent); }
+    .footer-copy { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--muted); letter-spacing: 0.06em; }
+
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .typing-wrap {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-top: 8px;
+      margin-bottom: 32px;
+    }
+    .typing-text { color: var(--gold); }
+    .cursor-blink {
+      display: inline-block;
+      width: 2px; height: 1em;
+      background: var(--gold);
+      margin-left: 2px;
+      vertical-align: middle;
+      animation: blink 0.8s step-end infinite;
+    }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; padding-top: 110px; }
+      .hero-visual { display: none; }
+      .about-grid { grid-template-columns: 1fr; }
+      .skills-layout { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .projects-hero-card { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="grid-bg"></div>
+
+  <header>
+    <nav class="nav">
+      <div class="logo">&lt;<span>caetano</span>.dev /&gt;</div>
+      <div class="nav-links">
+        <a href="#sobre">sobre</a>
+        <a href="#skills">skills</a>
+        <a href="#projetos">projetos</a>
+        <a href="#experiencia">experiência</a>
+        <a href="#contato">contato</a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <div class="hero-text">
+      <div class="hero-eyebrow">Disponível para oportunidades</div>
+      <h1>
+        Caetano<br>
+        <span class="line2">Silva</span><br>
+        <span class="accent">Euzebio</span>
+      </h1>
+      <p class="hero-desc">
+        Estudante de Análise e Desenvolvimento de Sistemas com foco em desenvolvimento web, banco de dados e soluções com IA. Perfil proativo, analítico e em constante evolução.
+      </p>
+      <div class="typing-wrap">
+        &gt;&nbsp;<span class="typing-text" id="typing"></span><span class="cursor-blink"></span>
+      </div>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#projetos">Ver projetos →</a>
+        <a class="btn btn-ghost" href="https://github.com/caetano3009" target="_blank">GitHub</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/caetano-silva-euzebio-6271591a0/" target="_blank">LinkedIn</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-num">1º</span>
+          <span class="stat-label">semestre ADS</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num">4+</span>
+          <span class="stat-label">projetos</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num">9+</span>
+          <span class="stat-label">cursos</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="profile-frame">
+        <div class="profile-placeholder">
+          <div class="profile-initial">CS</div>
+          <div class="profile-sub">caetano.dev</div>
+        </div>
+      </div>
+      <div class="badge-float tr">
+        <span class="badge-dot blue"></span>Aprendizado contínuo
+      </div>
+      <div class="badge-float bl">
+        <span class="badge-dot green"></span>Aberto a oportunidades
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <section id="sobre" class="reveal">
+    <div class="section-label">sobre mim</div>
+    <h2 class="section-title">Desenvolvedor em <em>formação,</em><br>mentalidade de <em>profissional</em></h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>
+          Sou estudante de <strong>Análise e Desenvolvimento de Sistemas</strong>, com perfil comprometido, proativo e excelente capacidade de adaptação. Busco uma oportunidade que permita aprendizado contínuo, desenvolvimento profissional e a entrega de soluções eficientes e inovadoras.
+        </p>
+        <p>
+          Desenvolvo projetos focados em interfaces web, banco de dados e organização de informações. Gosto de transformar ideias em páginas funcionais com visual moderno, boa experiência de uso e estrutura bem organizada.
+        </p>
+        <div class="info-list">
+          <div class="info-row">
+            <span class="info-key">Local</span>
+            <span class="info-val">São Paulo, SP — Guaianases</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">Email</span>
+            <span class="info-val"><a href="mailto:caetanoribeiro461@gmail.com">caetanoribeiro461@gmail.com</a></span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">Formação</span>
+            <span class="info-val">Análise e Desenvolvimento de Sistemas — conclusão 2º sem. 2026</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">LinkedIn</span>
+            <span class="info-val"><a href="https://www.linkedin.com/in/caetano-silva-euzebio-6271591a0/" target="_blank">caetano-silva-euzebio</a></span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">GitHub</span>
+            <span class="info-val"><a href="https://github.com/caetano3009" target="_blank">caetano3009</a></span>
+          </div>
+        </div>
+        <div class="lang-row" style="margin-top:28px">
+          <div class="lang-chip">🇧🇷 Português <span class="lang-level">NATIVO</span></div>
+          <div class="lang-chip">🇺🇸 Inglês <span class="lang-level">INTERMEDIÁRIO</span></div>
+          <div class="lang-chip">🇪🇸 Espanhol <span class="lang-level">BÁSICO</span></div>
+        </div>
+      </div>
+
+      <div class="courses-box">
+        <h3>📚 Cursos & Certificações</h3>
+        <div class="course-item">
+          <span class="course-icon">▸</span>
+          <div><div class="course-name">Fundamentos de IA no Azure</div><div class="course-org">Fundação Bradesco</div></div>
+        </div>
+        <div class="course-item">
+          <span class="course-icon">▸</span>
+          <div><div class="course-name">Projetos de Sistemas de TI</div><div class="course-org">Fundação Bradesco</div></div>
+        </div>
+        <div class="course-item">
+          <span class="course-icon">▸</span>
+          <div><div class="course-name">Programação Python</div><div class="course-org">Fundação Bradesco</div></div>
+        </div>
+        <div class="course-item">
+          <span class="course-icon">▸</span>
+          <div><div class="course-name">Excel Avançado</div><div class="course-org">Fundação Bradesco</div></div>
+        </div>
+        <div class="course-item">
+          <span class="course-icon">▸</span>
+          <div><div class="course-name">Gestão de Carreira</div><div class="course-org">Fundação Nube</div></div>
+        </div>
+        <div class="course-item">
+          <span class="course-icon">▸</span>
+          <div><div class="course-name">Marketing Pessoal</div><div class="course-org">Fundação Nube</div></div>
+        </div>
+        <div class="course-item">
+          <span class="course-icon">▸</span>
+          <div><div class="course-name">Java Básico</div><div class="course-org">Cursos em Vídeo</div></div>
+        </div>
+        <div class="course-item">
+          <span class="course-icon">▸</span>
+          <div><div class="course-name">Gestão de Riscos em Processos</div><div class="course-org">Enap</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <section id="skills" class="reveal">
+    <div class="section-label">habilidades</div>
+    <h2 class="section-title">Stack &amp; <em>Competências</em></h2>
+    <div class="skills-layout">
+      <div class="skill-card">
+        <div class="skill-card-title">// linguagens & tecnologias</div>
+        <div class="skill-row"><span class="skill-name">HTML</span><div class="skill-bar"><div class="skill-fill" data-width="92%"></div></div><span class="skill-pct">92%</span></div>
+        <div class="skill-row"><span class="skill-name">CSS</span><div class="skill-bar"><div class="skill-fill" data-width="88%"></div></div><span class="skill-pct">88%</span></div>
+        <div class="skill-row"><span class="skill-name">MySQL</span><div class="skill-bar"><div class="skill-fill" data-width="80%"></div></div><span class="skill-pct">80%</span></div>
+        <div class="skill-row"><span class="skill-name">PHP</span><div class="skill-bar"><div class="skill-fill" data-width="75%"></div></div><span class="skill-pct">75%</span></div>
+        <div class="skill-row"><span class="skill-name">JavaScript</span><div class="skill-bar"><div class="skill-fill" data-width="68%"></div></div><span class="skill-pct">68%</span></div>
+        <div class="skill-row"><span class="skill-name">Python</span><div class="skill-bar"><div class="skill-fill" data-width="55%"></div></div><span class="skill-pct">55%</span></div>
+        <div class="skill-row"><span class="skill-name">Java</span><div class="skill-bar"><div class="skill-fill" data-width="40%"></div></div><span class="skill-pct">40%</span></div>
+        <div class="skill-row"><span class="skill-name">C</span><div class="skill-bar"><div class="skill-fill" data-width="38%"></div></div><span class="skill-pct">38%</span></div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:20px;">
+        <div class="skill-card">
+          <div class="skill-card-title">// ferramentas</div>
+          <div class="tag-cloud">
+            <span class="tag-pill">VS Code</span>
+            <span class="tag-pill">PyCharm</span>
+            <span class="tag-pill">XAMPP</span>
+            <span class="tag-pill">MySQL Workbench</span>
+            <span class="tag-pill">Power BI</span>
+            <span class="tag-pill">Excel Avançado</span>
+            <span class="tag-pill">PowerPoint</span>
+            <span class="tag-pill">Bootstrap</span>
+            <span class="tag-pill">Git / GitHub</span>
+          </div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-title">// soft skills</div>
+          <div class="tag-cloud">
+            <span class="tag-pill">Raciocínio Lógico</span>
+            <span class="tag-pill">Comunicação</span>
+            <span class="tag-pill">Colaboração</span>
+            <span class="tag-pill">Adaptabilidade</span>
+            <span class="tag-pill">Organização</span>
+            <span class="tag-pill">Responsabilidade</span>
+            <span class="tag-pill">Aprendizado Rápido</span>
+          </div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-title">// áreas de interesse</div>
+          <div class="tag-cloud">
+            <span class="tag-pill">Desenvolvimento Web</span>
+            <span class="tag-pill">Banco de Dados</span>
+            <span class="tag-pill">Inteligência Artificial</span>
+            <span class="tag-pill">Automação</span>
+            <span class="tag-pill">UX / UI</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <section id="projetos" class="reveal">
+    <div class="section-label">projetos</div>
+    <h2 class="section-title">O que eu <em>construí</em></h2>
+
+    <div class="projects-hero-card">
+      <div>
+        <div class="proj-number">01 — DESTAQUE</div>
+        <div class="proj-title">SisGESC — Sistema de Gestão de Clínica</div>
+        <p class="proj-desc">Sistema completo de gestão clínica com cadastro de pacientes, profissionais e agendamento de consultas. Aplicação prática de banco de dados em cenário real com foco em organização eficiente de dados.</p>
+        <div class="proj-tags">
+          <span class="proj-tag">PHP</span>
+          <span class="proj-tag">MySQL</span>
+          <span class="proj-tag">CRUD</span>
+          <span class="proj-tag">Banco de Dados</span>
+        </div>
+      </div>
+      <a class="proj-link-btn" href="https://github.com/caetano3009/Projeto-de-Banco-de-Dados---SisGESC" target="_blank">Ver código →</a>
+    </div>
+
+    <div class="projects-grid">
+      <div class="proj-mini">
+        <div class="proj-number">02</div>
+        <div class="proj-title">Site de Vagas de Estágio</div>
+        <p class="proj-desc">Plataforma web para divulgação e visualização de oportunidades com integração a banco de dados.</p>
+        <div class="proj-tags"><span class="proj-tag">HTML</span><span class="proj-tag">CSS</span><span class="proj-tag">PHP</span><span class="proj-tag">MySQL</span></div>
+        <a class="proj-link-btn" style="margin-top:16px;display:inline-flex" href="https://github.com/caetano3009/site-vaga-de-estagio" target="_blank">GitHub →</a>
+      </div>
+      <div class="proj-mini">
+        <div class="proj-number">03</div>
+        <div class="proj-title">Clínica Odontológica</div>
+        <p class="proj-desc">Projeto acadêmico de agendamento e gerenciamento para clínica odontológica com interface funcional.</p>
+        <div class="proj-tags"><span class="proj-tag">PHP</span><span class="proj-tag">Bootstrap</span><span class="proj-tag">MySQL</span></div>
+        <a class="proj-link-btn" style="margin-top:16px;display:inline-flex" href="https://github.com/caetano3009/clinica-odonto-" target="_blank">GitHub →</a>
+      </div>
+      <div class="proj-mini">
+        <div class="proj-number">04</div>
+        <div class="proj-title">RolêFinder</div>
+        <p class="proj-desc">App front-end para encontrar lugares e lazer com filtros personalizados e layout moderno.</p>
+        <div class="proj-tags"><span class="proj-tag">HTML</span><span class="proj-tag">CSS</span><span class="proj-tag">JavaScript</span></div>
+        <a class="proj-link-btn" style="margin-top:16px;display:inline-flex" href="https://github.com/caetano3009/FindRole" target="_blank">GitHub →</a>
+      </div>
+      <div class="proj-mini">
+        <div class="proj-number">05</div>
+        <div class="proj-title">🧠 Fundamentos em C</div>
+        <p class="proj-desc">Repositório com implementações em C para lógica de programação e construção de algoritmos.</p>
+        <div class="proj-tags"><span class="proj-tag">C</span><span class="proj-tag">Lógica</span><span class="proj-tag">Algoritmos</span></div>
+        <a class="proj-link-btn" style="margin-top:16px;display:inline-flex" href="https://github.com/caetano3009/c-fundamentos-algoritmos" target="_blank">GitHub →</a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <section id="experiencia" class="reveal">
+    <div class="section-label">experiência</div>
+    <h2 class="section-title">Áreas de <em>atuação</em></h2>
+    <div class="exp-grid">
+      <div class="exp-card">
+        <div class="exp-icon">🖥️</div>
+        <h3>Desenvolvimento Web</h3>
+        <p>Criação de páginas e sistemas com HTML, CSS, PHP e JavaScript. Foco em usabilidade, responsividade e boas práticas.</p>
+      </div>
+      <div class="exp-card">
+        <div class="exp-icon">🗄️</div>
+        <h3>Banco de Dados</h3>
+        <p>Modelagem e manipulação de dados com MySQL. Experiência em CRUD, relacionamentos e integração com aplicações web.</p>
+      </div>
+      <div class="exp-card">
+        <div class="exp-icon">📊</div>
+        <h3>Análise de Dados</h3>
+        <p>Organização e interpretação de dados com Excel Avançado e Power BI em contextos acadêmicos e profissionais.</p>
+      </div>
+      <div class="exp-card">
+        <div class="exp-icon">🤖</div>
+        <h3>IA & Cloud</h3>
+        <p>Fundamentos de Inteligência Artificial com Azure. Interesse crescente em automação e soluções inteligentes.</p>
+      </div>
+      <div class="exp-card">
+        <div class="exp-icon">📁</div>
+        <h3>Análise Documental</h3>
+        <p>Atuação na HS Prevent com verificação, registro e organização de informações com foco em precisão.</p>
+      </div>
+      <div class="exp-card">
+        <div class="exp-icon">💡</div>
+        <h3>Resolução de Problemas</h3>
+        <p>Perfil analítico, raciocínio lógico e facilidade de aprendizado para enfrentar desafios técnicos e organizacionais.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <section id="contato" class="reveal">
+    <div class="section-label">contato</div>
+    <h2 class="section-title">Vamos <em>conversar</em></h2>
+    <p style="color:var(--muted);max-width:520px;margin-bottom:36px;line-height:1.75;">
+      Estou disponível para estágios, projetos freelancer ou qualquer oportunidade na área de tecnologia. Me chama!
+    </p>
+    <div class="contact-grid">
+      <a class="contact-card" href="https://github.com/caetano3009" target="_blank">
+        <div class="contact-icon">🐙</div>
+        <h3>GitHub</h3>
+        <p>github.com/caetano3009</p>
+      </a>
+      <a class="contact-card" href="https://www.linkedin.com/in/caetano-silva-euzebio-6271591a0/" target="_blank">
+        <div class="contact-icon">💼</div>
+        <h3>LinkedIn</h3>
+        <p>caetano-silva-euzebio-6271591a0</p>
+      </a>
+      <a class="contact-card" href="mailto:caetanoribeiro461@gmail.com">
+        <div class="contact-icon">✉️</div>
+        <h3>E-mail</h3>
+        <p>caetanoribeiro461@gmail.com</p>
+      </a>
+      <a class="contact-card" href="tel:+5511943889469">
+        <div class="contact-icon">📱</div>
+        <h3>Celular</h3>
+        <p>(11) 94388-9469</p>
+      </a>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <footer>
+    <div class="footer-logo">&lt;caetano.dev /&gt;</div>
+    <div class="footer-copy">© 2026 — Desenvolvido com HTML, CSS & JS</div>
+  </footer>
+
+  <script>
+    const words = ['Desenvolvimento Web','Banco de Dados','Soluções com IA','Interfaces Modernas','Projetos Acadêmicos'];
+    let wi=0,ci=0,del=false;
+    const el=document.getElementById('typing');
+    function type(){const w=words[wi];el.textContent=w.substring(0,ci);if(!del&&ci<w.length){ci++;setTimeout(type,80);}else if(del&&ci>0){ci--;setTimeout(type,40);}else{del=!del;if(!del)wi=(wi+1)%words.length;setTimeout(type,800);}}
+    type();
+
+    const revEls=document.querySelectorAll('.reveal');
+    const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.12});
+    revEls.forEach(r=>obs.observe(r));
+
+    const fills=document.querySelectorAll('.skill-fill');
+    const sObs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.style.width=e.target.dataset.width;sObs.unobserve(e.target);}});},{threshold:0.4});
+    fills.forEach(f=>sObs.observe(f));
+  </script>
+</body>
+</html>
