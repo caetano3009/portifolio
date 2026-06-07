@@ -212,7 +212,7 @@
       overflow: hidden;
       border: 1px solid var(--border);
     }
-    .<img src="foto.jpg" class="profile-photo"> {
+    .profile-placeholder {
       width: 100%;
       aspect-ratio: 3/4;
       background: linear-gradient(135deg, #0d1a2e 0%, #0a1520 50%, #0d2030 100%);
@@ -649,6 +649,14 @@
 
       <div class="courses-box">
         <h3>📚 Cursos & Certificações</h3>
+        <div class="course-item" style="border-bottom:1px solid rgba(0,229,255,0.15);background:rgba(0,229,255,0.04);border-radius:8px;padding:8px 10px;margin-bottom:6px;">
+          <span class="course-icon" style="color:var(--accent);">🛡️</span>
+          <div>
+            <div class="course-name" style="color:var(--accent);font-weight:700;">Introduction to Cybersecurity</div>
+            <div class="course-org">Cisco Networking Academy · Jun 2026</div>
+            <a href="https://www.credly.com/badges/001286f2-ff24-4899-b8b9-b64bae9f35c5/linked_in_profile" target="_blank" style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--accent);text-decoration:none;opacity:0.8;">Ver credencial →</a>
+          </div>
+        </div>
         <div class="course-item">
           <span class="course-icon">▸</span>
           <div><div class="course-name">Fundamentos de IA no Azure</div><div class="course-org">Fundação Bradesco</div></div>
@@ -747,181 +755,55 @@
   <hr class="section-divider">
 
   <section id="projetos" class="reveal">
-  <div class="section-label">projetos</div>
-  <h2 class="section-title">O que eu <em>construí</em></h2>
+    <div class="section-label">projetos</div>
+    <h2 class="section-title">O que eu <em>construí</em></h2>
 
-  <div class="projects-hero-card">
-    <div>
-      <div class="proj-number">01 — DESTAQUE</div>
-      <div class="proj-title">SisGESC — Sistema de Gestão de Clínica</div>
-
-      <p class="proj-desc">
-        Sistema completo de gestão clínica com cadastro de pacientes,
-        profissionais e agendamento de consultas. Aplicação prática
-        de banco de dados em cenário real com foco em organização
-        eficiente de dados.
-      </p>
-
-      <div class="proj-tags">
-        <span class="proj-tag">PHP</span>
-        <span class="proj-tag">MySQL</span>
-        <span class="proj-tag">CRUD</span>
-        <span class="proj-tag">Banco de Dados</span>
+    <div class="projects-hero-card">
+      <div>
+        <div class="proj-number">01 — DESTAQUE</div>
+        <div class="proj-title">SisGESC — Sistema de Gestão de Clínica</div>
+        <p class="proj-desc">Sistema completo de gestão clínica com cadastro de pacientes, profissionais e agendamento de consultas. Aplicação prática de banco de dados em cenário real com foco em organização eficiente de dados.</p>
+        <div class="proj-tags">
+          <span class="proj-tag">PHP</span>
+          <span class="proj-tag">MySQL</span>
+          <span class="proj-tag">CRUD</span>
+          <span class="proj-tag">Banco de Dados</span>
+        </div>
       </div>
+      <a class="proj-link-btn" href="https://github.com/caetano3009/Projeto-de-Banco-de-Dados---SisGESC" target="_blank">Ver código →</a>
     </div>
 
-    <a
-      class="proj-link-btn"
-      href="https://github.com/caetano3009/Projeto-de-Banco-de-Dados---SisGESC"
-      target="_blank"
-    >
-      Ver código →
-    </a>
-  </div>
-
-  <div class="projects-grid">
-
-    <!-- Projeto 02 -->
-
-    <div class="proj-mini">
-      <div class="proj-number">02</div>
-      <div class="proj-title">Site de Vagas de Estágio</div>
-
-      <p class="proj-desc">
-        Plataforma web para divulgação e visualização de oportunidades
-        com integração a banco de dados.
-      </p>
-
-      <div class="proj-tags">
-        <span class="proj-tag">HTML</span>
-        <span class="proj-tag">CSS</span>
-        <span class="proj-tag">PHP</span>
-        <span class="proj-tag">MySQL</span>
+    <div class="projects-grid">
+      <div class="proj-mini">
+        <div class="proj-number">02</div>
+        <div class="proj-title">Site de Vagas de Estágio</div>
+        <p class="proj-desc">Plataforma web para divulgação e visualização de oportunidades com integração a banco de dados.</p>
+        <div class="proj-tags"><span class="proj-tag">HTML</span><span class="proj-tag">CSS</span><span class="proj-tag">PHP</span><span class="proj-tag">MySQL</span></div>
+        <a class="proj-link-btn" style="margin-top:16px;display:inline-flex" href="https://github.com/caetano3009/site-vaga-de-estagio" target="_blank">GitHub →</a>
       </div>
-
-      <a
-        class="proj-link-btn"
-        style="margin-top:16px;display:inline-flex"
-        href="https://github.com/caetano3009/site-vaga-de-estagio"
-        target="_blank"
-      >
-        GitHub →
-      </a>
-    </div>
-
-    <!-- Projeto 03 -->
-
-    <div class="proj-mini">
-      <div class="proj-number">03</div>
-      <div class="proj-title">Clínica Odontológica</div>
-
-      <p class="proj-desc">
-        Projeto acadêmico de agendamento e gerenciamento para clínica
-        odontológica com interface funcional.
-      </p>
-
-      <div class="proj-tags">
-        <span class="proj-tag">PHP</span>
-        <span class="proj-tag">Bootstrap</span>
-        <span class="proj-tag">MySQL</span>
+      <div class="proj-mini">
+        <div class="proj-number">03</div>
+        <div class="proj-title">Clínica Odontológica</div>
+        <p class="proj-desc">Projeto acadêmico de agendamento e gerenciamento para clínica odontológica com interface funcional.</p>
+        <div class="proj-tags"><span class="proj-tag">PHP</span><span class="proj-tag">Bootstrap</span><span class="proj-tag">MySQL</span></div>
+        <a class="proj-link-btn" style="margin-top:16px;display:inline-flex" href="https://github.com/caetano3009/clinica-odonto-" target="_blank">GitHub →</a>
       </div>
-
-      <a
-        class="proj-link-btn"
-        style="margin-top:16px;display:inline-flex"
-        href="https://github.com/caetano3009/clinica-odonto-"
-        target="_blank"
-      >
-        GitHub →
-      </a>
-    </div>
-
-    <!-- Projeto 04 -->
-
-    <div class="proj-mini">
-      <div class="proj-number">04</div>
-      <div class="proj-title">RolêFinder</div>
-
-      <p class="proj-desc">
-        App front-end para encontrar lugares e lazer com filtros
-        personalizados e layout moderno.
-      </p>
-
-      <div class="proj-tags">
-        <span class="proj-tag">HTML</span>
-        <span class="proj-tag">CSS</span>
-        <span class="proj-tag">JavaScript</span>
+      <div class="proj-mini">
+        <div class="proj-number">04</div>
+        <div class="proj-title">RolêFinder</div>
+        <p class="proj-desc">App front-end para encontrar lugares e lazer com filtros personalizados e layout moderno.</p>
+        <div class="proj-tags"><span class="proj-tag">HTML</span><span class="proj-tag">CSS</span><span class="proj-tag">JavaScript</span></div>
+        <a class="proj-link-btn" style="margin-top:16px;display:inline-flex" href="https://github.com/caetano3009/FindRole" target="_blank">GitHub →</a>
       </div>
-
-      <a
-        class="proj-link-btn"
-        style="margin-top:16px;display:inline-flex"
-        href="https://github.com/caetano3009/FindRole"
-        target="_blank"
-      >
-        GitHub →
-      </a>
-    </div>
-
-    <!-- Projeto 05 -->
-
-    <div class="proj-mini">
-      <div class="proj-number">05</div>
-      <div class="proj-title">🧠 Fundamentos em C</div>
-
-      <p class="proj-desc">
-        Repositório com implementações em C para lógica de programação
-        e construção de algoritmos.
-      </p>
-
-      <div class="proj-tags">
-        <span class="proj-tag">C</span>
-        <span class="proj-tag">Lógica</span>
-        <span class="proj-tag">Algoritmos</span>
+      <div class="proj-mini">
+        <div class="proj-number">05</div>
+        <div class="proj-title">🧠 Fundamentos em C</div>
+        <p class="proj-desc">Repositório com implementações em C para lógica de programação e construção de algoritmos.</p>
+        <div class="proj-tags"><span class="proj-tag">C</span><span class="proj-tag">Lógica</span><span class="proj-tag">Algoritmos</span></div>
+        <a class="proj-link-btn" style="margin-top:16px;display:inline-flex" href="https://github.com/caetano3009/c-fundamentos-algoritmos" target="_blank">GitHub →</a>
       </div>
-
-      <a
-        class="proj-link-btn"
-        style="margin-top:16px;display:inline-flex"
-        href="https://github.com/caetano3009/c-fundamentos-algoritmos"
-        target="_blank"
-      >
-        GitHub →
-      </a>
     </div>
-
-    <!-- Projeto 06 -->
-
-    <div class="proj-mini">
-      <div class="proj-number">06</div>
-      <div class="proj-title">MediaLog</div>
-
-      <p class="proj-desc">
-        Sistema web para gerenciamento de conteúdos multimídia,
-        permitindo organização, cadastro e visualização de informações
-        em uma interface moderna e responsiva.
-      </p>
-
-      <div class="proj-tags">
-        <span class="proj-tag">HTML</span>
-        <span class="proj-tag">CSS</span>
-        <span class="proj-tag">JavaScript</span>
-        <span class="proj-tag">PHP</span>
-        <span class="proj-tag">MySQL</span>
-      </div>
-
-      <a
-        class="proj-link-btn"
-        style="margin-top:16px;display:inline-flex"
-        href="https://github.com/caetano3009/Catalogo"
-        target="_blank"
-      >
-        GitHub →
-      </a>
-    </div>
-
-  </div>
-</section>
+  </section>
 
   <hr class="section-divider">
 
