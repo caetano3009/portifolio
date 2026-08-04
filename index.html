@@ -1,912 +1,643 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Caetano Silva | Dev Portfolio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg:      #060810;
-      --surface: #0d1120;
-      --card:    #111827;
-      --text:    #eef0f8;
-      --muted:   #7b82a3;
-      --dim:     #3a4060;
-      --accent:  #00e5ff;
-      --gold:    #ffd166;
-      --rose:    #ff4f7b;
-      --border:  rgba(0,229,255,0.10);
-      --glow:    rgba(0,229,255,0.18);
-    }
+import React, { useState, useEffect } from "react";
+import {
+  Github, Linkedin, Mail, ExternalLink, Terminal, Sparkles, Code2, MapPin,
+  Calendar, Send, Gamepad2, Film, BookOpen, Download, Sun, Moon, Phone, Heart,
+  Server, Database, Bot, Wrench, GraduationCap, Layers,
+} from "lucide-react";
 
-    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-    html { scroll-behavior: smooth; }
+const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Space+Mono:wght@400;700&display=swap');`;
 
-    body {
-      font-family: 'Syne', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      overflow-x: hidden;
-      line-height: 1.65;
-    }
+const NAV_ITEMS = [
+  { id: "home", label: "Início" },
+  { id: "sobre", label: "Sobre" },
+  { id: "experiencia", label: "Experiências" },
+  { id: "projetos", label: "Projetos" },
+  { id: "skills", label: "Skills" },
+  { id: "contato", label: "Contato" },
+];
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 999;
-      opacity: 0.4;
-    }
+const experience = [
+  {
+    role: "Estudante de Análise e Desenvolvimento de Sistemas",
+    org: "Faculdade, São Paulo",
+    period: "2024 - Presente",
+    place: "São Paulo, SP",
+    desc: "Cursando ADS com foco em desenvolvimento full stack, arquitetura de sistemas e boas práticas de programação.",
+    bullets: [
+      "Participação em projetos acadêmicos usando JavaScript, PHP e Node.js",
+      "Aprendizado de metodologias ágeis e trabalho em equipe",
+      "Foco em usabilidade e experiência do usuário nos projetos práticos",
+    ],
+    stack: ["JavaScript", "PHP", "Node.js", "Git"],
+  },
+  {
+    role: "Extensão Universitária — HemoBot / SaberSangue",
+    org: "UNICID × Colsan",
+    period: "2025",
+    place: "São Paulo, SP",
+    desc: "Itinerário Extensionista em parceria com a Colsan, construindo um chatbot pra tirar dúvidas sobre doação de sangue.",
+    bullets: [
+      "Chatbot construído com a API do Gemini",
+      "Documentação completa do projeto entregue à instituição",
+      "Trabalho direto com uma organização de doação de sangue",
+    ],
+    stack: ["Gemini API", "Documentação", "Extensão"],
+  },
+  {
+    role: "Memórias — scrapbook compartilhado",
+    org: "Projeto pessoal",
+    period: "2025",
+    place: "São Paulo, SP",
+    desc: "Scrapbook digital a dois com fotos, textos e notas, login duplo e sincronização entre dispositivos.",
+    bullets: [
+      "Backend com Supabase para sync em tempo real",
+      "Sistema de login para dois usuários",
+      "Deploy contínuo via Vercel",
+    ],
+    stack: ["React", "Supabase", "Vercel"],
+  },
+  {
+    role: "FindRolê & primeiros projetos",
+    org: "Projetos independentes",
+    period: "2023 - 2024",
+    place: "São Paulo, SP",
+    desc: "Início da jornada construindo apps práticos — rastreador de rolês em São Paulo, sistema de gestão de clínica e um app de finanças gamificado.",
+    bullets: [
+      "FindRolê: descoberta de lugares em SP com estado salvo em localStorage",
+      "SisGESC: ERP de clínica em PHP/MySQL",
+      "LevelUp Finance: finanças pessoais com sistema de XP e níveis",
+    ],
+    stack: ["PHP", "MySQL", "JavaScript", "Chart.js"],
+  },
+];
 
-    .grid-bg {
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      background-image:
-        linear-gradient(rgba(0,229,255,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,229,255,0.025) 1px, transparent 1px);
-      background-size: 48px 48px;
-    }
-    .grid-bg::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,229,255,0.07) 0%, transparent 70%);
-    }
+const projects = [
+  {
+    name: "Memórias",
+    tag: "Destaque",
+    filter: "web",
+    desc: "Scrapbook digital compartilhado a dois, com fotos, textos e notas, login duplo e sync entre dispositivos via Supabase.",
+    stack: ["React", "Supabase", "Vercel"],
+    href: "https://memorias-dusky-six.vercel.app",
+    code: "https://github.com/caetano3009",
+  },
+  {
+    name: "FindRolê",
+    tag: "Ativo",
+    filter: "web",
+    desc: "Rastreador de rolês em São Paulo — parques, bares, e lugares pra explorar, com atribuição de quem já foi em cada um.",
+    stack: ["JavaScript", "localStorage", "CSS"],
+    href: "#",
+    code: "https://github.com/caetano3009/FindRole",
+  },
+  {
+    name: "LevelUp Finance",
+    tag: "RPG",
+    filter: "app",
+    desc: "App de finanças pessoais gamificado — classes, XP, level up e gráficos de progresso pra tornar controle de gasto menos chato.",
+    stack: ["JavaScript", "Chart.js", "localStorage"],
+    href: "#",
+    code: "https://github.com/caetano3009",
+  },
+  {
+    name: "Catálogo de Mídia",
+    tag: "Full stack",
+    filter: "app",
+    desc: "Inspirado no Letterboxd — coleções pessoais de filmes, games, anime, mangá e livros, com autenticação por usuário.",
+    stack: ["Node.js", "Express", "SQLite"],
+    href: "#",
+    code: "https://github.com/caetano3009",
+  },
+  {
+    name: "HemoBot / SaberSangue",
+    tag: "Extensão",
+    filter: "ia",
+    desc: "Chatbot construído com Gemini pra Colsan, tirando dúvidas sobre doação de sangue — projeto de extensão UNICID.",
+    stack: ["Gemini API", "Extensão universitária"],
+    href: "#",
+    code: "#",
+  },
+  {
+    name: "SisGESC",
+    tag: "ERP",
+    filter: "app",
+    desc: "Sistema de gestão para clínicas — cadastro, agendamento e prontuário, construído em PHP/MySQL.",
+    stack: ["PHP", "MySQL"],
+    href: "#",
+    code: "https://github.com/caetano3009",
+  },
+];
 
-    header {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 500;
-      backdrop-filter: blur(20px) saturate(160%);
-      background: rgba(6,8,16,0.75);
-      border-bottom: 1px solid var(--border);
-    }
-    .nav {
-      max-width: 1160px;
-      margin: 0 auto;
-      padding: 16px 28px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .logo {
-      font-family: 'Space Mono', monospace;
-      font-size: 1rem;
-      color: var(--accent);
-      letter-spacing: 0.05em;
-    }
-    .logo span { color: var(--gold); }
-    .nav-links { display: flex; gap: 28px; }
-    .nav-links a {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.78rem;
-      color: var(--muted);
-      text-decoration: none;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      transition: color 0.25s;
-    }
-    .nav-links a:hover { color: var(--accent); }
+const skillGroups = [
+  {
+    group: "Front-end",
+    icon: Code2,
+    color: "from-cyan-400 to-cyan-600",
+    items: [["JavaScript", 90], ["React", 82], ["HTML/CSS", 92], ["Tailwind", 78]],
+  },
+  {
+    group: "Back-end",
+    icon: Server,
+    color: "from-amber-300 to-amber-500",
+    items: [["Node.js/Express", 78], ["PHP", 80], ["API REST", 85]],
+  },
+  {
+    group: "Banco de dados",
+    icon: Database,
+    color: "from-teal-300 to-cyan-500",
+    items: [["MySQL", 80], ["SQLite", 75], ["Supabase", 74]],
+  },
+  {
+    group: "IA & Automação",
+    icon: Bot,
+    color: "from-yellow-300 to-amber-500",
+    items: [["Gemini API", 75], ["Chatbots", 78]],
+  },
+  {
+    group: "Ferramentas",
+    icon: Wrench,
+    color: "from-sky-300 to-cyan-500",
+    items: [["Git/GitHub", 88], ["Vercel", 80], ["VS Code", 90]],
+  },
+  {
+    group: "Fundamentos",
+    icon: GraduationCap,
+    color: "from-amber-400 to-yellow-600",
+    items: [["C", 65], ["SQL", 78], ["Cibersegurança (Cisco)", 65]],
+  },
+];
 
-    .hero {
-      min-height: 100vh;
-      max-width: 1160px;
-      margin: 0 auto;
-      padding: 140px 28px 80px;
-      display: grid;
-      grid-template-columns: 1fr 380px;
-      align-items: center;
-      gap: 60px;
-    }
+const otherSkills = ["Clean Code", "Metodologias Ágeis", "Code Review", "Deploy contínuo", "UI/UX", "Documentação técnica"];
 
-    .hero-eyebrow {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.78rem;
-      color: var(--accent);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-bottom: 18px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .hero-eyebrow::before {
-      content: "";
-      display: block;
-      width: 32px; height: 1px;
-      background: var(--accent);
-    }
+const filters = [
+  { id: "todos", label: "Todos", icon: Layers },
+  { id: "web", label: "Web", icon: Code2 },
+  { id: "app", label: "Apps", icon: Terminal },
+  { id: "ia", label: "IA", icon: Bot },
+];
 
-    .hero h1 {
-      font-size: clamp(2.8rem, 5.5vw, 5rem);
-      font-weight: 800;
-      line-height: 1.02;
-      letter-spacing: -0.02em;
-      margin-bottom: 22px;
-    }
-    .hero h1 .line2 {
-      color: transparent;
-      -webkit-text-stroke: 1.5px rgba(238,240,248,0.35);
-    }
-    .hero h1 .accent { color: var(--accent); }
+function useScrollSpy(ids) {
+  const [active, setActive] = useState(ids[0]);
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(e.target.id);
+        });
+      },
+      { rootMargin: "-40% 0px -50% 0px", threshold: 0 }
+    );
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) obs.observe(el);
+    });
+    return () => obs.disconnect();
+  }, [ids]);
+  return active;
+}
 
-    .hero-desc {
-      font-size: 1.05rem;
-      color: var(--muted);
-      max-width: 500px;
-      margin-bottom: 16px;
-      line-height: 1.75;
-    }
+export default function Portfolio() {
+  const [filter, setFilter] = useState("todos");
+  const [dark, setDark] = useState(true);
+  const active = useScrollSpy(NAV_ITEMS.map((n) => n.id));
+  const shown = filter === "todos" ? projects : projects.filter((p) => p.filter === filter);
 
-    .hero-cta {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-bottom: 52px;
-    }
+  const theme = dark
+    ? { bg: "#060706", surface: "rgba(23,23,23,0.6)", border: "rgba(34,211,238,0.15)", text: "text-neutral-200", muted: "text-neutral-400" }
+    : { bg: "#f4f6f5", surface: "rgba(255,255,255,0.75)", border: "rgba(8,145,178,0.15)", text: "text-neutral-800", muted: "text-neutral-500" };
 
-    .btn {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.8rem;
-      padding: 13px 22px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      transition: all 0.25s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .btn-primary {
-      background: var(--accent);
-      color: #060810;
-      box-shadow: 0 0 28px rgba(0,229,255,0.25);
-    }
-    .btn-primary:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 32px rgba(0,229,255,0.45);
-    }
-    .btn-ghost {
-      border: 1px solid var(--dim);
-      color: var(--text);
-      background: transparent;
-    }
-    .btn-ghost:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      transform: translateY(-3px);
-    }
+  return (
+    <div
+      style={{ fontFamily: "'Space Mono', monospace", backgroundColor: theme.bg }}
+      className={`min-h-screen ${theme.text} overflow-x-hidden transition-colors duration-300`}
+    >
+      <style>{`
+        ${FONT_IMPORT}
+        .display { font-family: 'Syne', sans-serif; }
+        .card { background: ${theme.surface}; border: 1px solid ${theme.border}; transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px -12px rgba(34,211,238,0.25); }
+        .lift { transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease; }
+        .lift:hover { transform: translateY(-2px); }
+        .glow-btn { transition: all 0.25s ease; }
+        .glow-btn:hover { box-shadow: 0 0 24px rgba(34,211,238,0.35); background-position: right center; }
+        .tag-chip { transition: all 0.2s ease; }
+        .tag-chip:hover { background: rgba(34,211,238,0.18); border-color: rgba(34,211,238,0.5); transform: translateY(-1px); }
+        .icon-pop { transition: transform 0.2s ease; }
+        .icon-pop:hover { transform: scale(1.12) rotate(-4deg); }
+        .nav-link { transition: color 0.2s ease, background-color 0.2s ease; }
+        .underline-grow { position: relative; }
+        .underline-grow::after {
+          content: ""; position: absolute; left: 0; bottom: -2px; height: 1px; width: 0;
+          background: linear-gradient(90deg, #22d3ee, #facc15); transition: width 0.25s ease;
+        }
+        .underline-grow:hover::after { width: 100%; }
+        .project-thumb { transition: transform 0.4s ease; }
+        .project-card:hover .project-thumb { transform: scale(1.06); }
+        .project-card { transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; }
+        .project-card:hover { transform: translateY(-5px); box-shadow: 0 16px 34px -14px rgba(34,211,238,0.3); }
+        .social-btn { transition: all 0.2s ease; }
+        .social-btn:hover { background: rgba(34,211,238,0.12); border-color: rgba(34,211,238,0.5); transform: translateY(-2px); }
+        .bar-fill { transition: width 1s ease; }
+        .photo-frame { transition: transform 0.4s ease, border-color 0.3s ease; }
+        .photo-frame:hover { transform: translateY(-3px) rotate(-0.5deg); border-color: rgba(34,211,238,0.6); }
+        .grain::before {
+          content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.03;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+      `}</style>
+      <div className="grain" />
 
-    .hero-stats { display: flex; gap: 36px; }
-    .stat-num {
-      font-size: 2rem;
-      font-weight: 800;
-      color: var(--accent);
-      display: block;
-      line-height: 1;
-    }
-    .stat-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.72rem;
-      color: var(--muted);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-top: 4px;
-    }
-    .stat-divider {
-      width: 1px;
-      background: var(--dim);
-      align-self: stretch;
-    }
+      {/* NAV */}
+      <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-lg border-b" style={{ borderColor: theme.border, backgroundColor: dark ? "rgba(0,0,0,0.5)" : "rgba(255,255,255,0.6)" }}>
+        <div className="max-w-6xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between gap-4">
+          <a href="#home" className="icon-pop w-9 h-9 shrink-0 rounded-lg bg-gradient-to-br from-cyan-400/20 to-yellow-400/20 border border-cyan-400/40 flex items-center justify-center">
+            <Terminal size={16} className="text-cyan-400" />
+          </a>
 
-    .hero-visual { position: relative; }
-    .profile-frame {
-      position: relative;
-      border-radius: 16px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-    }
-    .profile-placeholder {
-      width: 100%;
-      aspect-ratio: 3/4;
-      background: linear-gradient(135deg, #0d1a2e 0%, #0a1520 50%, #0d2030 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-    }
-    .profile-initial {
-      font-size: 6rem;
-      font-weight: 800;
-      color: transparent;
-      -webkit-text-stroke: 2px var(--accent);
-      line-height: 1;
-      filter: drop-shadow(0 0 20px rgba(0,229,255,0.4));
-    }
-    .profile-sub {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.72rem;
-      color: var(--accent);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-    }
+          <div className="hidden md:flex items-center gap-1 bg-neutral-900/40 border rounded-full px-2 py-1.5" style={{ borderColor: theme.border }}>
+            {NAV_ITEMS.map((n) => (
+              <a
+                key={n.id}
+                href={`#${n.id}`}
+                className={`nav-link relative text-xs uppercase tracking-widest px-4 py-2 rounded-full ${
+                  active === n.id ? "text-cyan-300 bg-cyan-400/10" : `${theme.muted} hover:text-cyan-300 hover:bg-cyan-400/5`
+                }`}
+              >
+                {n.label}
+              </a>
+            ))}
+          </div>
 
-    .badge-float {
-      position: absolute;
-      z-index: 2;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 14px;
-      backdrop-filter: blur(12px);
-      font-family: 'Space Mono', monospace;
-      font-size: 0.72rem;
-    }
-    .badge-float.bl { bottom: 20px; left: -20px; color: #00e5a0; }
-    .badge-float.tr { top: 24px; right: -20px; color: var(--accent); }
-    .badge-dot {
-      display: inline-block;
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      margin-right: 6px;
-      animation: blink 1.4s ease-in-out infinite;
-    }
-    .badge-dot.green { background: #00e5a0; }
-    .badge-dot.blue  { background: var(--accent); }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
-    section {
-      max-width: 1160px;
-      margin: 0 auto;
-      padding: 90px 28px;
-    }
-
-    .section-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.72rem;
-      color: var(--accent);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .section-label::after {
-      content: "";
-      flex: 1;
-      max-width: 60px;
-      height: 1px;
-      background: var(--accent);
-      opacity: 0.5;
-    }
-
-    .section-title {
-      font-size: clamp(1.8rem, 3vw, 2.6rem);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      margin-bottom: 40px;
-      line-height: 1.1;
-    }
-    .section-title em {
-      font-style: normal;
-      color: var(--accent);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 40px;
-      align-items: start;
-    }
-    .about-text p {
-      color: var(--muted);
-      margin-bottom: 18px;
-      line-height: 1.8;
-    }
-    .about-text strong { color: var(--text); }
-
-    .info-list { margin-top: 28px; display: flex; flex-direction: column; gap: 12px; }
-    .info-row { display: flex; gap: 14px; align-items: flex-start; font-size: 0.92rem; }
-    .info-key {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--accent);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      min-width: 80px;
-      padding-top: 2px;
-    }
-    .info-val { color: var(--text); }
-    .info-val a { color: var(--accent); text-decoration: none; }
-    .info-val a:hover { text-decoration: underline; }
-
-    .courses-box {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 26px;
-    }
-    .courses-box h3 { font-size: 1rem; font-weight: 700; margin-bottom: 18px; color: var(--gold); }
-    .course-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      font-size: 0.88rem;
-    }
-    .course-item:last-child { border-bottom: none; }
-    .course-icon { color: var(--accent); font-size: 0.75rem; margin-top: 2px; flex-shrink: 0; }
-    .course-name { color: var(--text); }
-    .course-org { font-family: 'Space Mono', monospace; font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
-
-    .skills-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
-    .skill-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 26px;
-      transition: border-color 0.3s, transform 0.3s;
-    }
-    .skill-card:hover { border-color: rgba(0,229,255,0.3); transform: translateY(-4px); }
-    .skill-card-title {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 20px;
-    }
-    .skill-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-    .skill-name { font-size: 0.88rem; min-width: 90px; color: var(--text); }
-    .skill-bar { flex: 1; height: 3px; background: var(--dim); border-radius: 99px; overflow: hidden; }
-    .skill-fill {
-      height: 100%;
-      border-radius: 99px;
-      background: linear-gradient(90deg, var(--accent), #00b4cc);
-      width: 0;
-      transition: width 1.2s cubic-bezier(0.22,1,0.36,1);
-    }
-    .skill-pct { font-family: 'Space Mono', monospace; font-size: 0.68rem; color: var(--muted); min-width: 30px; text-align: right; }
-
-    .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
-    .tag-pill {
-      padding: 6px 12px;
-      border: 1px solid var(--dim);
-      border-radius: 999px;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--muted);
-      transition: all 0.2s;
-    }
-    .tag-pill:hover { border-color: var(--accent); color: var(--accent); }
-
-    .projects-hero-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 32px;
-      margin-bottom: 28px;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: center;
-      gap: 24px;
-      transition: border-color 0.3s, transform 0.3s;
-    }
-    .projects-hero-card:hover { border-color: rgba(0,229,255,0.4); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
-    .proj-number { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--accent); letter-spacing: 0.1em; margin-bottom: 8px; }
-    .proj-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 10px; }
-    .proj-desc { color: var(--muted); font-size: 0.92rem; line-height: 1.7; margin-bottom: 16px; }
-    .proj-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-    .proj-tag {
-      padding: 4px 10px;
-      border-radius: 4px;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.68rem;
-      background: rgba(0,229,255,0.08);
-      color: var(--accent);
-      border: 1px solid rgba(0,229,255,0.15);
-    }
-    .proj-link-btn {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.72rem;
-      color: var(--accent);
-      text-decoration: none;
-      border: 1px solid var(--border);
-      padding: 10px 16px;
-      border-radius: 8px;
-      white-space: nowrap;
-      transition: all 0.2s;
-    }
-    .proj-link-btn:hover { background: rgba(0,229,255,0.08); border-color: var(--accent); }
-
-    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
-    .proj-mini {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 24px;
-      transition: border-color 0.3s, transform 0.3s;
-    }
-    .proj-mini:hover { border-color: rgba(0,229,255,0.35); transform: translateY(-4px); }
-    .proj-mini .proj-title { font-size: 1.05rem; }
-    .proj-mini .proj-desc { font-size: 0.86rem; margin-bottom: 14px; }
-
-    .exp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
-    .exp-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 26px;
-      transition: border-color 0.3s, transform 0.3s;
-    }
-    .exp-card:hover { border-color: rgba(255,209,102,0.35); transform: translateY(-4px); }
-    .exp-icon { font-size: 1.6rem; margin-bottom: 14px; }
-    .exp-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
-    .exp-card p { color: var(--muted); font-size: 0.88rem; line-height: 1.65; }
-
-    .lang-row { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; }
-    .lang-chip {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 8px 18px;
-      font-size: 0.9rem;
-    }
-    .lang-level { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.06em; }
-
-    .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
-    .contact-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 26px;
-      text-decoration: none;
-      transition: border-color 0.3s, transform 0.3s;
-      display: block;
-    }
-    .contact-card:hover { border-color: rgba(0,229,255,0.4); transform: translateY(-4px); }
-    .contact-icon { font-size: 1.6rem; margin-bottom: 14px; }
-    .contact-card h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
-    .contact-card p { font-size: 0.82rem; color: var(--muted); word-break: break-all; }
-
-    .section-divider {
-      max-width: 1160px;
-      margin: 0 auto;
-      padding: 0 28px;
-      border: none;
-      border-top: 1px solid var(--border);
-    }
-
-    footer {
-      max-width: 1160px;
-      margin: 0 auto;
-      padding: 40px 28px 60px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-    .footer-logo { font-family: 'Space Mono', monospace; font-size: 0.85rem; color: var(--accent); }
-    .footer-copy { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--muted); letter-spacing: 0.06em; }
-
-    .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-
-    .typing-wrap {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin-top: 8px;
-      margin-bottom: 32px;
-    }
-    .typing-text { color: var(--gold); }
-    .cursor-blink {
-      display: inline-block;
-      width: 2px; height: 1em;
-      background: var(--gold);
-      margin-left: 2px;
-      vertical-align: middle;
-      animation: blink 0.8s step-end infinite;
-    }
-
-    @media (max-width: 900px) {
-      .hero { grid-template-columns: 1fr; padding-top: 110px; }
-      .hero-visual { display: none; }
-      .about-grid { grid-template-columns: 1fr; }
-      .skills-layout { grid-template-columns: 1fr; }
-      .nav-links { display: none; }
-      .projects-hero-card { grid-template-columns: 1fr; }
-    }
-  </style>
-</head>
-<body>
-
-  <div class="grid-bg"></div>
-
-  <header>
-    <nav class="nav">
-      <div class="logo">&lt;<span>caetano</span>.dev /&gt;</div>
-      <div class="nav-links">
-        <a href="#sobre">sobre</a>
-        <a href="#skills">skills</a>
-        <a href="#projetos">projetos</a>
-        <a href="#experiencia">experiência</a>
-        <a href="#contato">contato</a>
-      </div>
-    </nav>
-  </header>
-
-  <div class="hero">
-    <div class="hero-text">
-      <div class="hero-eyebrow">Disponível para oportunidades</div>
-      <h1>
-        Caetano<br>
-        <span class="line2">Silva</span><br>
-        <span class="accent">Euzebio</span>
-      </h1>
-      <p class="hero-desc">
-        Estudante de Análise e Desenvolvimento de Sistemas com foco em desenvolvimento web, banco de dados e soluções com IA. Perfil proativo, analítico e em constante evolução.
-      </p>
-      <div class="typing-wrap">
-        &gt;&nbsp;<span class="typing-text" id="typing"></span><span class="cursor-blink"></span>
-      </div>
-      <div class="hero-cta">
-        <a class="btn btn-primary" href="#projetos">Ver projetos →</a>
-        <a class="btn btn-ghost" href="https://github.com/caetano3009" target="_blank">GitHub</a>
-        <a class="btn btn-ghost" href="https://www.linkedin.com/in/caetano-silva-euzebio-6271591a0/" target="_blank">LinkedIn</a>
-      </div>
-      <div class="hero-stats">
-        <div class="stat">
-          <span class="stat-num">1º</span>
-          <span class="stat-label">semestre ADS</span>
+          <div className="flex items-center gap-2 shrink-0">
+            <a
+              href="#"
+              download
+              className="lift glow-btn hidden sm:flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-br from-cyan-400/20 to-yellow-400/20 border border-cyan-400/40 text-xs text-cyan-200 hover:border-cyan-300"
+            >
+              <Download size={13} /> Currículo
+            </a>
+            <button
+              onClick={() => setDark((d) => !d)}
+              aria-label="Alternar tema"
+              className="lift icon-pop p-2.5 rounded-full bg-gradient-to-br from-cyan-400/20 to-yellow-400/20 border border-cyan-400/40 text-cyan-300 hover:border-cyan-300"
+            >
+              {dark ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
+          </div>
         </div>
-        <div class="stat-divider"></div>
-        <div class="stat">
-          <span class="stat-num">5+</span>
-          <span class="stat-label">projetos</span>
+      </nav>
+
+      {/* HERO */}
+      <section id="home" className="relative min-h-screen flex items-center pt-24 px-6">
+        <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-yellow-500/5" />
+        <div className="absolute top-1/3 left-10 w-72 h-72 rounded-full bg-cyan-500/10 blur-3xl" />
+        <div className="absolute bottom-10 right-10 w-96 h-64 rounded-full bg-yellow-500/5 blur-3xl" />
+
+        <div className="relative z-10 max-w-6xl mx-auto grid md:grid-cols-[1.1fr,0.9fr] gap-10 items-center w-full">
+          <div className="text-center md:text-left">
+            <div className="flex items-center justify-center md:justify-start gap-2 mb-4 text-cyan-300 text-xs tracking-[0.3em] uppercase">
+              <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full" /> olá, eu sou
+            </div>
+            <h1 className="display text-5xl md:text-7xl font-extrabold leading-[0.95] mb-4">
+              <span className="bg-gradient-to-r from-cyan-300 via-cyan-400 to-yellow-300 bg-clip-text text-transparent">Caetano</span>
+            </h1>
+            <h2 className="display text-xl md:text-2xl mb-5">Estudante de ADS · Desenvolvedor Full Stack</h2>
+            <p className={`${theme.muted} text-sm md:text-base leading-relaxed max-w-xl mx-auto md:mx-0 mb-8`}>
+              Construo ferramentas práticas do dia a dia — de rastreadores de rolê em São Paulo a scrapbooks
+              compartilhados — sempre com uma UI cuidada e um pé no universo de anime, games e cinema.
+            </p>
+            <div className="flex flex-wrap justify-center md:justify-start gap-4 items-center">
+              <a href="#projetos" className="lift glow-btn px-5 py-2.5 rounded-full bg-gradient-to-br from-cyan-400/20 to-yellow-400/20 border border-cyan-400/40 hover:border-cyan-300 text-sm text-cyan-200">
+                Ver projetos →
+              </a>
+              <div className="flex gap-3">
+                <a href="https://github.com/caetano3009" className="lift social-btn p-3 card rounded-xl"><Github size={18} /></a>
+                <a href="#" className="lift social-btn p-3 card rounded-xl"><Linkedin size={18} /></a>
+                <a href="mailto:hello@example.com" className="lift social-btn p-3 card rounded-xl"><Mail size={18} /></a>
+              </div>
+            </div>
+          </div>
+
+          <div className="relative justify-self-center">
+            <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500/20 to-yellow-400/10 rounded-3xl blur-xl" />
+            {/* Troque a foto abaixo pela sua — substitua o src pela imagem que você mandar */}
+            <div className="photo-frame relative w-64 h-64 md:w-80 md:h-80 rounded-2xl border-2 border-cyan-400/30 bg-neutral-900 flex items-center justify-center overflow-hidden">
+              <img
+                src="https://placehold.co/400x400/0a0a0a/22d3ee?text=sua+foto+aqui"
+                alt="Foto de perfil"
+                className="w-full h-full object-cover opacity-80"
+              />
+            </div>
+            <div className="icon-pop absolute -top-4 -right-4 w-11 h-11 bg-gradient-to-r from-cyan-400 to-cyan-600 rounded-xl flex items-center justify-center rotate-6">
+              <Code2 size={18} className="text-black" />
+            </div>
+            <div className="icon-pop absolute -bottom-4 -left-4 w-12 h-12 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-2xl flex items-center justify-center -rotate-6">
+              <Gamepad2 size={20} className="text-black" />
+            </div>
+          </div>
         </div>
-        <div class="stat-divider"></div>
-        <div class="stat">
-          <span class="stat-num">9+</span>
-          <span class="stat-label">cursos</span>
+      </section>
+
+      {/* SOBRE */}
+      <section id="sobre" className="relative py-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-14">
+            <h2 className="display text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-cyan-300 to-yellow-300 bg-clip-text text-transparent">Sobre mim</h2>
+            <p className={`${theme.muted} max-w-2xl mx-auto text-sm md:text-base`}>Análise e Desenvolvimento de Sistemas em São Paulo, com um portfólio construído projeto a projeto.</p>
+          </div>
+
+          <div className="grid md:grid-cols-[0.8fr,1.2fr] gap-8 items-center mb-14">
+            <div className="relative justify-self-center">
+              <div className="absolute -top-3 -left-3 w-6 h-6 bg-cyan-400 rounded-lg rotate-12" />
+              <div className="absolute -top-2 -right-4 w-5 h-5 bg-yellow-400 rounded-md -rotate-12" />
+              <div className="photo-frame relative w-56 h-56 md:w-64 md:h-64 rounded-2xl overflow-hidden border-2 border-cyan-400/30 bg-neutral-900">
+                <img
+                  src="https://placehold.co/400x400/0a0a0a/facc15?text=foto"
+                  alt="Sobre"
+                  className="w-full h-full object-cover opacity-80"
+                />
+              </div>
+              <div className="icon-pop absolute -bottom-3 -right-3 w-9 h-9 bg-gradient-to-r from-cyan-400 to-yellow-400 rounded-lg flex items-center justify-center">
+                <Heart size={16} className="text-black" />
+              </div>
+            </div>
+
+            <div className="space-y-5">
+              <div className="card rounded-2xl p-6">
+                <h3 className="display text-lg font-bold text-cyan-300 mb-3 flex items-center gap-2"><Sparkles size={16} /> Minha jornada</h3>
+                <p className={`${theme.muted} text-sm leading-relaxed`}>
+                  Cursando ADS, participei de um projeto de extensão universitária na UNICID em parceria com a Colsan,
+                  onde ajudei a construir um chatbot de doação de sangue. No caminho, fui construindo apps práticos —
+                  de gestão de clínica a scrapbook de casal — pra praticar full stack de ponta a ponta.
+                </p>
+              </div>
+              <div className="card rounded-2xl p-6">
+                <h3 className="display text-lg font-bold text-yellow-300 mb-3 flex items-center gap-2"><Code2 size={16} /> Filosofia</h3>
+                <p className={`${theme.muted} text-sm leading-relaxed`}>
+                  Acredito em código limpo e UI cuidada, mesmo em projetos pessoais pequenos. Anime, mangá, games e
+                  filmes moldam boa parte do que construo fora da faculdade — de um catálogo estilo Letterboxd a um
+                  rastreador de rolê pensado pra explorar São Paulo com quem eu gosto.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-3">
+            {["JavaScript", "PHP", "C", "Node.js", "React", "MySQL", "Supabase", "Git"].map((t) => (
+              <span key={t} className="tag-chip px-4 py-2 bg-gradient-to-r from-cyan-500/10 to-yellow-500/10 border border-cyan-500/20 rounded-xl text-xs text-cyan-300">{t}</span>
+            ))}
+          </div>
         </div>
-      </div>
+      </section>
+
+      {/* EXPERIÊNCIA */}
+      <section id="experiencia" className="py-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-14">
+            <h2 className="display text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-cyan-300 to-yellow-300 bg-clip-text text-transparent">Experiência &amp; Projetos</h2>
+            <p className={`${theme.muted} text-sm md:text-base`}>Do código à sala de aula — construindo soluções práticas</p>
+          </div>
+
+          <div className="relative mb-12">
+            <div className="absolute left-4 md:left-1/2 md:-translate-x-0.5 top-0 bottom-0 w-0.5 bg-gradient-to-b from-cyan-500 via-yellow-500/50 to-transparent" />
+            <div className="space-y-10">
+              {experience.map((exp, i) => (
+                <div key={exp.role} className={`relative flex ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}>
+                  <div className={`absolute left-4 md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full border-4 z-10 ${i % 2 === 0 ? "bg-cyan-400" : "bg-yellow-400"}`} style={{ borderColor: theme.bg }} />
+                  <div className={`ml-12 md:ml-0 w-full md:w-5/12 ${i % 2 === 0 ? "md:mr-auto md:pr-8" : "md:ml-auto md:pl-8"}`}>
+                    <div className="card rounded-2xl p-6 hover:border-cyan-400/50 transition-colors">
+                      <h3 className="display font-bold text-base mb-1">{exp.role}</h3>
+                      <p className="text-cyan-300 text-sm mb-3">{exp.org}</p>
+                      <div className={`flex flex-wrap items-center gap-4 mb-3 text-xs ${theme.muted}`}>
+                        <span className="flex items-center gap-1"><Calendar size={12} /> {exp.period}</span>
+                        <span className="flex items-center gap-1"><MapPin size={12} /> {exp.place}</span>
+                      </div>
+                      <p className={`${theme.muted} text-sm leading-relaxed mb-4`}>{exp.desc}</p>
+                      <ul className="space-y-1.5 mb-4">
+                        {exp.bullets.map((b) => (
+                          <li key={b} className={`flex items-start gap-2 text-xs ${theme.muted}`}>
+                            <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full mt-1 shrink-0" /> {b}
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="flex flex-wrap gap-1.5">
+                        {exp.stack.map((s) => (
+                          <span key={s} className="px-2 py-0.5 bg-cyan-500/10 text-cyan-300 rounded-md text-[10px] border border-cyan-500/20">{s}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="card rounded-2xl p-8 text-center bg-gradient-to-br from-cyan-500/5 to-yellow-500/5">
+            <h3 className="display text-xl font-bold text-cyan-300 mb-2">Quer saber mais sobre minha experiência?</h3>
+            <p className={`${theme.muted} text-sm mb-5`}>Entre em contato pra conversarmos sobre oportunidades e projetos.</p>
+            <a href="#contato" className="lift glow-btn inline-block px-5 py-2.5 rounded-full bg-gradient-to-br from-cyan-400/20 to-yellow-400/20 border border-cyan-400/40 hover:border-cyan-300 text-sm text-cyan-200">
+              Vamos conversar!
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* PROJETOS */}
+      <section id="projetos" className="py-24 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="display text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-cyan-300 to-yellow-300 bg-clip-text text-transparent flex items-center justify-center gap-3">
+              <Sparkles size={28} className="text-yellow-300" /> Projetos em Destaque <Sparkles size={28} className="text-yellow-300" />
+            </h2>
+            <p className={`${theme.muted} text-sm md:text-base`}>Explore minha coleção de ferramentas construídas com carinho</p>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-2 mb-10">
+            {filters.map((f) => {
+              const Icon = f.icon;
+              const isActive = filter === f.id;
+              return (
+                <button
+                  key={f.id}
+                  onClick={() => setFilter(f.id)}
+                  className={`lift px-4 py-2 rounded-xl text-xs flex items-center gap-2 ${
+                    isActive ? "bg-gradient-to-r from-cyan-500 to-cyan-600 text-black font-bold" : `card ${theme.muted} hover:border-cyan-400/40 hover:text-cyan-300`
+                  }`}
+                >
+                  <Icon size={14} /> {f.label}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {shown.map((p) => (
+              <div key={p.name} className="project-card group relative card rounded-2xl overflow-hidden hover:border-cyan-400/50">
+                <div className="absolute top-3 left-3 z-10 bg-gradient-to-r from-cyan-500 to-yellow-400 text-black text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1">
+                  <Sparkles size={10} /> {p.tag}
+                </div>
+                <div className="absolute top-3 right-3 z-10 flex gap-2">
+                  <a href={p.code} target="_blank" rel="noreferrer" className="lift icon-pop bg-black/60 border border-cyan-500/30 rounded-lg p-1.5 hover:bg-cyan-500/20"><Github size={14} className="text-cyan-300" /></a>
+                  {p.href !== "#" && (
+                    <a href={p.href} target="_blank" rel="noreferrer" className="lift icon-pop bg-gradient-to-r from-cyan-500 to-cyan-600 rounded-lg p-1.5"><ExternalLink size={14} className="text-black" /></a>
+                  )}
+                </div>
+                <div className="h-32 bg-gradient-to-br from-cyan-500/20 to-yellow-500/10 flex items-center justify-center overflow-hidden">
+                  <Code2 size={36} className="project-thumb text-cyan-400/40" />
+                </div>
+                <div className="p-5">
+                  <h3 className="display font-bold text-base mb-2 group-hover:text-cyan-300 transition-colors">{p.name}</h3>
+                  <p className={`${theme.muted} text-xs leading-relaxed mb-3 line-clamp-3`}>{p.desc}</p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap gap-1.5">
+                      {p.stack.map((s) => (
+                        <span key={s} className="tag-chip px-2 py-0.5 bg-cyan-500/10 text-cyan-300 rounded-md text-[10px] border border-cyan-500/20">{s}</span>
+                      ))}
+                    </div>
+                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400/60 shrink-0" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SKILLS */}
+      <section id="skills" className="py-24 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-14">
+            <h2 className="display text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-cyan-300 to-yellow-300 bg-clip-text text-transparent">Habilidades</h2>
+            <p className={`${theme.muted} text-sm md:text-base`}>Competências construídas projeto a projeto</p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {skillGroups.map((g) => {
+              const Icon = g.icon;
+              return (
+                <div key={g.group} className="card rounded-2xl p-7">
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${g.color} flex items-center justify-center shrink-0`}>
+                      <Icon size={18} className="text-black" />
+                    </div>
+                    <h3 className="display text-base font-bold">{g.group}</h3>
+                  </div>
+                  <div className="space-y-4">
+                    {g.items.map(([label, pct]) => (
+                      <div key={label}>
+                        <div className={`flex justify-between text-xs mb-1.5 ${theme.muted}`}>
+                          <span>{label}</span><span className="text-cyan-300">{pct}%</span>
+                        </div>
+                        <div className="h-1.5 bg-neutral-800/50 rounded-full overflow-hidden">
+                          <div className={`bar-fill h-full bg-gradient-to-r ${g.color} rounded-full`} style={{ width: `${pct}%` }} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="text-center">
+            <h3 className="display text-lg font-bold text-cyan-300 mb-5">Outras Competências</h3>
+            <div className="flex flex-wrap justify-center gap-3">
+              {otherSkills.map((s) => (
+                <span key={s} className="tag-chip px-4 py-2 bg-gradient-to-r from-cyan-500/10 to-yellow-500/10 border border-cyan-500/20 rounded-xl text-xs text-cyan-300">{s}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CONTATO */}
+      <section id="contato" className="py-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-14">
+            <h2 className="display text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-cyan-300 to-yellow-300 bg-clip-text text-transparent">Vamos conversar?</h2>
+            <p className={`${theme.muted} text-sm md:text-base`}>Sempre aberto a trocar ideia sobre projetos novos ou oportunidades.</p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-6">
+            <div className="space-y-6">
+              <div className="card rounded-2xl p-7">
+                <h3 className="display text-lg font-bold mb-5 flex items-center gap-2"><Mail size={18} className="text-cyan-300" /> Informações de contato</h3>
+                <div className="space-y-3">
+                  <a href="mailto:hello@example.com" className="lift flex items-center gap-4 p-3 bg-cyan-500/5 rounded-xl border border-cyan-500/15 hover:border-cyan-400/40 hover:bg-cyan-500/10">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-cyan-400 to-yellow-400 flex items-center justify-center shrink-0"><Mail size={16} className="text-black" /></div>
+                    <div className="min-w-0">
+                      <p className={`text-xs ${theme.muted}`}>Email</p>
+                      <p className="text-sm truncate">caetanoribeiro461@gmail.com</p>
+                    </div>
+                  </a>
+                  <a href="#" className="lift flex items-center gap-4 p-3 bg-cyan-500/5 rounded-xl border border-cyan-500/15 hover:border-cyan-400/40 hover:bg-cyan-500/10">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-cyan-400 to-yellow-400 flex items-center justify-center shrink-0"><Phone size={16} className="text-black" /></div>
+                    <div className="min-w-0">
+                      <p className={`text-xs ${theme.muted}`}>Telefone</p>
+                      <p className="text-sm truncate">+55 (11) 94388-9469</p>
+                    </div>
+                  </a>
+                  <div className="flex items-center gap-4 p-3 bg-cyan-500/5 rounded-xl border border-cyan-500/15">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-cyan-400 to-yellow-400 flex items-center justify-center shrink-0"><MapPin size={16} className="text-black" /></div>
+                    <div className="min-w-0">
+                      <p className={`text-xs ${theme.muted}`}>Localização</p>
+                      <p className="text-sm truncate">São Paulo, Brasil</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="card rounded-2xl p-7">
+                <h3 className="display text-lg font-bold mb-5 text-cyan-300">Redes sociais</h3>
+                <div className="flex gap-3">
+                  <a href="https://github.com/caetano3009" className="lift social-btn flex-1 flex items-center justify-center gap-2 p-3 bg-cyan-500/5 rounded-xl border border-cyan-500/15 text-sm">
+                    <Github size={18} className="text-cyan-300" /> GitHub
+                  </a>
+                  <a href="#" className="lift social-btn flex-1 flex items-center justify-center gap-2 p-3 bg-cyan-500/5 rounded-xl border border-cyan-500/15 text-sm">
+                    <Linkedin size={18} className="text-cyan-300" /> LinkedIn
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <form className="card rounded-2xl p-7 h-full" onSubmit={(e) => e.preventDefault()}>
+              <h3 className="display text-lg font-bold mb-5 flex items-center gap-2"><Send size={18} className="text-cyan-300" /> Envie uma mensagem</h3>
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className={`text-xs ${theme.muted} block mb-1.5`}>Nome</label>
+                    <input className="w-full bg-cyan-500/5 border border-cyan-500/20 focus:border-cyan-400 rounded-lg px-3 py-2.5 text-sm outline-none" placeholder="Seu nome" />
+                  </div>
+                  <div>
+                    <label className={`text-xs ${theme.muted} block mb-1.5`}>Email</label>
+                    <input type="email" className="w-full bg-cyan-500/5 border border-cyan-500/20 focus:border-cyan-400 rounded-lg px-3 py-2.5 text-sm outline-none" placeholder="seu@email.com" />
+                  </div>
+                </div>
+                <div>
+                  <label className={`text-xs ${theme.muted} block mb-1.5`}>Assunto</label>
+                  <input className="w-full bg-cyan-500/5 border border-cyan-500/20 focus:border-cyan-400 rounded-lg px-3 py-2.5 text-sm outline-none" placeholder="Sobre o que quer conversar?" />
+                </div>
+                <div>
+                  <label className={`text-xs ${theme.muted} block mb-1.5`}>Mensagem</label>
+                  <textarea rows={4} className="w-full bg-cyan-500/5 border border-cyan-500/20 focus:border-cyan-400 rounded-lg px-3 py-2.5 text-sm outline-none resize-none" placeholder="Conte-me sobre seu projeto ou ideia..." />
+                </div>
+                <button type="submit" className="lift glow-btn w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-gradient-to-br from-cyan-400/20 to-yellow-400/20 border border-cyan-400/40 hover:border-cyan-300 text-sm text-cyan-200">
+                  <Send size={15} /> Enviar via WhatsApp
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <footer className="py-10 px-6 border-t text-center text-xs" style={{ borderColor: theme.border }}>
+        <div className={`flex items-center justify-center gap-2 ${theme.muted} mb-2`}>
+          <span>Feito com</span> <Heart size={12} className="text-cyan-400" /> <span>e muito café</span>
+        </div>
+        <div className={theme.muted}>© {new Date().getFullYear()} Caetano. Todos os direitos reservados.</div>
+        <div className="flex items-center justify-center gap-3 mt-3">
+          <Film size={12} className="text-cyan-400/60" /><BookOpen size={12} className="text-cyan-400/60" /><Gamepad2 size={12} className="text-cyan-400/60" />
+        </div>
+      </footer>
     </div>
-
-    <div class="hero-visual">
-      <div class="profile-frame">
-        <div class="profile-placeholder">
-          <div class="profile-initial">CS</div>
-          <div class="profile-sub">caetano.dev</div>
-        </div>
-      </div>
-      <div class="badge-float tr">
-        <span class="badge-dot blue"></span>Aprendizado contínuo
-      </div>
-      <div class="badge-float bl">
-        <span class="badge-dot green"></span>Aberto a oportunidades
-      </div>
-    </div>
-  </div>
-
-  <hr class="section-divider">
-
-  <section id="sobre" class="reveal">
-    <div class="section-label">sobre mim</div>
-    <h2 class="section-title">Desenvolvedor em <em>formação,</em><br>mentalidade de <em>profissional</em></h2>
-    <div class="about-grid">
-      <div class="about-text">
-        <p>
-          Sou estudante de <strong>Análise e Desenvolvimento de Sistemas</strong>, com perfil comprometido, proativo e excelente capacidade de adaptação. Busco uma oportunidade que permita aprendizado contínuo, desenvolvimento profissional e a entrega de soluções eficientes e inovadoras.
-        </p>
-        <p>
-          Desenvolvo projetos focados em interfaces web, banco de dados e organização de informações. Gosto de transformar ideias em páginas funcionais com visual moderno, boa experiência de uso e estrutura bem organizada.
-        </p>
-        <div class="info-list">
-          <div class="info-row">
-            <span class="info-key">Local</span>
-            <span class="info-val">São Paulo, SP — Guaianases</span>
-          </div>
-          <div class="info-row">
-            <span class="info-key">Email</span>
-            <span class="info-val"><a href="mailto:caetanoribeiro461@gmail.com">caetanoribeiro461@gmail.com</a></span>
-          </div>
-          <div class="info-row">
-            <span class="info-key">Formação</span>
-            <span class="info-val">Análise e Desenvolvimento de Sistemas — conclusão 2º sem. 2026</span>
-          </div>
-          <div class="info-row">
-            <span class="info-key">LinkedIn</span>
-            <span class="info-val"><a href="https://www.linkedin.com/in/caetano-silva-euzebio-6271591a0/" target="_blank">caetano-silva-euzebio</a></span>
-          </div>
-          <div class="info-row">
-            <span class="info-key">GitHub</span>
-            <span class="info-val"><a href="https://github.com/caetano3009" target="_blank">caetano3009</a></span>
-          </div>
-        </div>
-        <div class="lang-row" style="margin-top:28px">
-          <div class="lang-chip">🇧🇷 Português <span class="lang-level">NATIVO</span></div>
-          <div class="lang-chip">🇺🇸 Inglês <span class="lang-level">INTERMEDIÁRIO</span></div>
-          <div class="lang-chip">🇪🇸 Espanhol <span class="lang-level">BÁSICO</span></div>
-        </div>
-      </div>
-
-      <div class="courses-box">
-        <h3>📚 Cursos & Certificações</h3>
-        <div class="course-item" style="border-bottom:1px solid rgba(0,229,255,0.15);background:rgba(0,229,255,0.04);border-radius:8px;padding:8px 10px;margin-bottom:6px;">
-          <span class="course-icon" style="color:var(--accent);">🛡️</span>
-          <div>
-            <div class="course-name" style="color:var(--accent);font-weight:700;">Introduction to Cybersecurity</div>
-            <div class="course-org">Cisco Networking Academy · Jun 2026</div>
-            <a href="https://www.credly.com/badges/001286f2-ff24-4899-b8b9-b64bae9f35c5/linked_in_profile" target="_blank" style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--accent);text-decoration:none;opacity:0.8;">Ver credencial →</a>
-          </div>
-        </div>
-        <div class="course-item">
-          <span class="course-icon">▸</span>
-          <div><div class="course-name">Fundamentos de IA no Azure</div><div class="course-org">Fundação Bradesco</div></div>
-        </div>
-        <div class="course-item">
-          <span class="course-icon">▸</span>
-          <div><div class="course-name">Projetos de Sistemas de TI</div><div class="course-org">Fundação Bradesco</div></div>
-        </div>
-        <div class="course-item">
-          <span class="course-icon">▸</span>
-          <div><div class="course-name">Programação Python</div><div class="course-org">Fundação Bradesco</div></div>
-        </div>
-        <div class="course-item">
-          <span class="course-icon">▸</span>
-          <div><div class="course-name">Excel Avançado</div><div class="course-org">Fundação Bradesco</div></div>
-        </div>
-        <div class="course-item">
-          <span class="course-icon">▸</span>
-          <div><div class="course-name">Gestão de Carreira</div><div class="course-org">Fundação Nube</div></div>
-        </div>
-        <div class="course-item">
-          <span class="course-icon">▸</span>
-          <div><div class="course-name">Marketing Pessoal</div><div class="course-org">Fundação Nube</div></div>
-        </div>
-        <div class="course-item">
-          <span class="course-icon">▸</span>
-          <div><div class="course-name">Java Básico</div><div class="course-org">Cursos em Vídeo</div></div>
-        </div>
-        <div class="course-item">
-          <span class="course-icon">▸</span>
-          <div><div class="course-name">Gestão de Riscos em Processos</div><div class="course-org">Enap</div></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <hr class="section-divider">
-
-  <section id="skills" class="reveal">
-    <div class="section-label">habilidades</div>
-    <h2 class="section-title">Stack &amp; <em>Competências</em></h2>
-    <div class="skills-layout">
-      <div class="skill-card">
-        <div class="skill-card-title">// linguagens & tecnologias</div>
-        <div class="skill-row"><span class="skill-name">HTML</span><div class="skill-bar"><div class="skill-fill" data-width="92%"></div></div><span class="skill-pct">92%</span></div>
-        <div class="skill-row"><span class="skill-name">CSS</span><div class="skill-bar"><div class="skill-fill" data-width="88%"></div></div><span class="skill-pct">88%</span></div>
-        <div class="skill-row"><span class="skill-name">MySQL</span><div class="skill-bar"><div class="skill-fill" data-width="80%"></div></div><span class="skill-pct">80%</span></div>
-        <div class="skill-row"><span class="skill-name">PHP</span><div class="skill-bar"><div class="skill-fill" data-width="75%"></div></div><span class="skill-pct">75%</span></div>
-        <div class="skill-row"><span class="skill-name">JavaScript</span><div class="skill-bar"><div class="skill-fill" data-width="68%"></div></div><span class="skill-pct">68%</span></div>
-        <div class="skill-row"><span class="skill-name">Python</span><div class="skill-bar"><div class="skill-fill" data-width="55%"></div></div><span class="skill-pct">55%</span></div>
-        <div class="skill-row"><span class="skill-name">Java</span><div class="skill-bar"><div class="skill-fill" data-width="40%"></div></div><span class="skill-pct">40%</span></div>
-        <div class="skill-row"><span class="skill-name">C</span><div class="skill-bar"><div class="skill-fill" data-width="38%"></div></div><span class="skill-pct">38%</span></div>
-      </div>
-
-      <div style="display:flex;flex-direction:column;gap:20px;">
-        <div class="skill-card">
-          <div class="skill-card-title">// ferramentas</div>
-          <div class="tag-cloud">
-            <span class="tag-pill">VS Code</span>
-            <span class="tag-pill">PyCharm</span>
-            <span class="tag-pill">XAMPP</span>
-            <span class="tag-pill">MySQL Workbench</span>
-            <span class="tag-pill">Power BI</span>
-            <span class="tag-pill">Excel Avançado</span>
-            <span class="tag-pill">PowerPoint</span>
-            <span class="tag-pill">Bootstrap</span>
-            <span class="tag-pill">Git / GitHub</span>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-title">// soft skills</div>
-          <div class="tag-cloud">
-            <span class="tag-pill">Raciocínio Lógico</span>
-            <span class="tag-pill">Comunicação</span>
-            <span class="tag-pill">Colaboração</span>
-            <span class="tag-pill">Adaptabilidade</span>
-            <span class="tag-pill">Organização</span>
-            <span class="tag-pill">Responsabilidade</span>
-            <span class="tag-pill">Aprendizado Rápido</span>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-title">// áreas de interesse</div>
-          <div class="tag-cloud">
-            <span class="tag-pill">Desenvolvimento Web</span>
-            <span class="tag-pill">Banco de Dados</span>
-            <span class="tag-pill">Inteligência Artificial</span>
-            <span class="tag-pill">Automação</span>
-            <span class="tag-pill">UX / UI</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <hr class="section-divider">
-
-  <section id="projetos" class="reveal">
-    <div class="section-label">projetos</div>
-    <h2 class="section-title">O que eu <em>construí</em></h2>
-
-    <div class="projects-hero-card">
-      <div>
-        <div class="proj-number">01 — DESTAQUE</div>
-        <div class="proj-title">SisGESC — Sistema de Gestão de Clínica</div>
-        <p class="proj-desc">Sistema completo de gestão clínica com cadastro de pacientes, profissionais e agendamento de consultas. Aplicação prática de banco de dados em cenário real com foco em organização eficiente de dados.</p>
-        <div class="proj-tags">
-          <span class="proj-tag">PHP</span>
-          <span class="proj-tag">MySQL</span>
-          <span class="proj-tag">CRUD</span>
-          <span class="proj-tag">Banco de Dados</span>
-        </div>
-      </div>
-      <a class="proj-link-btn" href="https://github.com/caetano3009/Projeto-de-Banco-de-Dados---SisGESC" target="_blank">Ver código →</a>
-    </div>
-
-    <div class="projects-grid">
-      <div class="proj-mini">
-        <div class="proj-number">02</div>
-        <div class="proj-title">Site de Vagas de Estágio</div>
-        <p class="proj-desc">Plataforma web para divulgação e visualização de oportunidades com integração a banco de dados.</p>
-        <div class="proj-tags"><span class="proj-tag">HTML</span><span class="proj-tag">CSS</span><span class="proj-tag">PHP</span><span class="proj-tag">MySQL</span></div>
-        <a class="proj-link-btn" style="margin-top:16px;display:inline-flex" href="https://github.com/caetano3009/site-vaga-de-estagio" target="_blank">GitHub →</a>
-      </div>
-      <div class="proj-mini">
-        <div class="proj-number">03</div>
-        <div class="proj-title">Clínica Odontológica</div>
-        <p class="proj-desc">Projeto acadêmico de agendamento e gerenciamento para clínica odontológica com interface funcional.</p>
-        <div class="proj-tags"><span class="proj-tag">PHP</span><span class="proj-tag">Bootstrap</span><span class="proj-tag">MySQL</span></div>
-        <a class="proj-link-btn" style="margin-top:16px;display:inline-flex" href="https://github.com/caetano3009/clinica-odonto-" target="_blank">GitHub →</a>
-      </div>
-      <div class="proj-mini">
-        <div class="proj-number">04</div>
-        <div class="proj-title">RolêFinder</div>
-        <p class="proj-desc">App front-end para encontrar lugares e lazer com filtros personalizados e layout moderno.</p>
-        <div class="proj-tags"><span class="proj-tag">HTML</span><span class="proj-tag">CSS</span><span class="proj-tag">JavaScript</span></div>
-        <a class="proj-link-btn" style="margin-top:16px;display:inline-flex" href="https://github.com/caetano3009/FindRole" target="_blank">GitHub →</a>
-      </div>
-      <div class="proj-mini">
-        <div class="proj-number">05</div>
-        <div class="proj-title">🧠 Fundamentos em C</div>
-        <p class="proj-desc">Repositório com implementações em C para lógica de programação e construção de algoritmos.</p>
-        <div class="proj-tags"><span class="proj-tag">C</span><span class="proj-tag">Lógica</span><span class="proj-tag">Algoritmos</span></div>
-        <a class="proj-link-btn" style="margin-top:16px;display:inline-flex" href="https://github.com/caetano3009/c-fundamentos-algoritmos" target="_blank">GitHub →</a>
-      </div>
-      <div class="proj-mini">
-        <div class="proj-number">06</div>
-        <div class="proj-title">📖 Memórias</div>
-        <p class="proj-desc">Caderno de recortes digital: álbum de fotos com legenda, textos e mural de recados compartilhado, com login para dois perfis e animação de origamis caindo. Backend opcional em C puro (sockets, sem frameworks) para sincronizar entre aparelhos.</p>
-        <div class="proj-tags"><span class="proj-tag">HTML</span><span class="proj-tag">CSS</span><span class="proj-tag">JavaScript</span><span class="proj-tag">C</span></div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
-          <a class="proj-link-btn" style="display:inline-flex" href="https://caetano3009.github.io/memorias/" target="_blank">Ver site →</a>
-          <a class="proj-link-btn" style="display:inline-flex" href="https://github.com/caetano3009/memorias" target="_blank">GitHub →</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <hr class="section-divider">
-
-  <section id="experiencia" class="reveal">
-    <div class="section-label">experiência</div>
-    <h2 class="section-title">Áreas de <em>atuação</em></h2>
-    <div class="exp-grid">
-      <div class="exp-card">
-        <div class="exp-icon">🖥️</div>
-        <h3>Desenvolvimento Web</h3>
-        <p>Criação de páginas e sistemas com HTML, CSS, PHP e JavaScript. Foco em usabilidade, responsividade e boas práticas.</p>
-      </div>
-      <div class="exp-card">
-        <div class="exp-icon">🗄️</div>
-        <h3>Banco de Dados</h3>
-        <p>Modelagem e manipulação de dados com MySQL. Experiência em CRUD, relacionamentos e integração com aplicações web.</p>
-      </div>
-      <div class="exp-card">
-        <div class="exp-icon">📊</div>
-        <h3>Análise de Dados</h3>
-        <p>Organização e interpretação de dados com Excel Avançado e Power BI em contextos acadêmicos e profissionais.</p>
-      </div>
-      <div class="exp-card">
-        <div class="exp-icon">🤖</div>
-        <h3>IA & Cloud</h3>
-        <p>Fundamentos de Inteligência Artificial com Azure. Interesse crescente em automação e soluções inteligentes.</p>
-      </div>
-      <div class="exp-card">
-        <div class="exp-icon">📁</div>
-        <h3>Análise Documental</h3>
-        <p>Atuação na HS Prevent com verificação, registro e organização de informações com foco em precisão.</p>
-      </div>
-      <div class="exp-card">
-        <div class="exp-icon">💡</div>
-        <h3>Resolução de Problemas</h3>
-        <p>Perfil analítico, raciocínio lógico e facilidade de aprendizado para enfrentar desafios técnicos e organizacionais.</p>
-      </div>
-    </div>
-  </section>
-
-  <hr class="section-divider">
-
-  <section id="contato" class="reveal">
-    <div class="section-label">contato</div>
-    <h2 class="section-title">Vamos <em>conversar</em></h2>
-    <p style="color:var(--muted);max-width:520px;margin-bottom:36px;line-height:1.75;">
-      Estou disponível para estágios, projetos freelancer ou qualquer oportunidade na área de tecnologia. Me chama!
-    </p>
-    <div class="contact-grid">
-      <a class="contact-card" href="https://github.com/caetano3009" target="_blank">
-        <div class="contact-icon">🐙</div>
-        <h3>GitHub</h3>
-        <p>github.com/caetano3009</p>
-      </a>
-      <a class="contact-card" href="https://www.linkedin.com/in/caetano-silva-euzebio-6271591a0/" target="_blank">
-        <div class="contact-icon">💼</div>
-        <h3>LinkedIn</h3>
-        <p>caetano-silva-euzebio-6271591a0</p>
-      </a>
-      <a class="contact-card" href="mailto:caetanoribeiro461@gmail.com">
-        <div class="contact-icon">✉️</div>
-        <h3>E-mail</h3>
-        <p>caetanoribeiro461@gmail.com</p>
-      </a>
-      <a class="contact-card" href="tel:+5511943889469">
-        <div class="contact-icon">📱</div>
-        <h3>Celular</h3>
-        <p>(11) 94388-9469</p>
-      </a>
-    </div>
-  </section>
-
-  <hr class="section-divider">
-
-  <footer>
-    <div class="footer-logo">&lt;caetano.dev /&gt;</div>
-    <div class="footer-copy">© 2026 — Desenvolvido com HTML, CSS & JS</div>
-  </footer>
-
-  <script>
-    const words = ['Desenvolvimento Web','Banco de Dados','Soluções com IA','Interfaces Modernas','Projetos Acadêmicos'];
-    let wi=0,ci=0,del=false;
-    const el=document.getElementById('typing');
-    function type(){const w=words[wi];el.textContent=w.substring(0,ci);if(!del&&ci<w.length){ci++;setTimeout(type,80);}else if(del&&ci>0){ci--;setTimeout(type,40);}else{del=!del;if(!del)wi=(wi+1)%words.length;setTimeout(type,800);}}
-    type();
-
-    const revEls=document.querySelectorAll('.reveal');
-    const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.12});
-    revEls.forEach(r=>obs.observe(r));
-
-    const fills=document.querySelectorAll('.skill-fill');
-    const sObs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.style.width=e.target.dataset.width;sObs.unobserve(e.target);}});},{threshold:0.4});
-    fills.forEach(f=>sObs.observe(f));
-  </script>
-</body>
-</html>
+  );
+}
